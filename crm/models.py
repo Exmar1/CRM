@@ -3,7 +3,18 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
  
 class CustomUser(AbstractUser):
-	pass
+	full_name = models.CharField(max_length=255, blank=True, verbose_name='ФИО')
+	phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
+	company_name = models.CharField(max_length=255, blank=True, verbose_name='Компания')
+	role = models.CharField(
+		max_length=20,
+		choices=[('freelancer', 'Фрилансер'), ('client', 'Клиент')],
+		default='freelancer',
+		verbose_name='Роль'
+	)
+
+	def __str__(self):
+		return self.username
 
 class Client(models.Model):
 	fullname = models.CharField(max_length=200, null=False, blank=False)
@@ -45,7 +56,7 @@ class Task(models.Model):
 
 class Communication(models.Model):
 	message = models.TextField(null=True, blank=True)
-	сalls = models.TextField(null=True, blank=True)
+	calls = models.TextField(null=True, blank=True)
 	letters = models.TextField(null=True, blank=True)
 	
 class Invoice(models.Model):

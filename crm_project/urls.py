@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from crm import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+	
+    #Home
+	path('',  views.home, name='home'),
+	path('create-project/', views.create_project, name='create_project'),
+	path('create_task/', views.create_task, name='create_task'),
 ]

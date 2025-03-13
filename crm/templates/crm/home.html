@@ -1,0 +1,33 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+<h1>Мои Задачи</h1>
+
+<button id='open-form-btn'>Добавить задачу</button>
+
+<div id='task-form' style='display: none;'>
+	<form hx-post="{% url 'create_task' %}" hx-target='#task-list' hx-swap='beforeend'>
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type='submit'>Сохранить</button>
+	</form>
+</div>
+
+<ul id='task-list'>
+	{% for task in tasks %}
+		{% include 'crm/task_item.html' %}
+	{% endfor %}	
+</ul>
+
+<script>
+	document.getElementById('open-form-btn').addEventListener('click', function() {
+			var form = document.getElementById('task-form');
+			if (form.style.display === 'none') {
+					form.style.display = 'block';
+			} else {
+					form.style.display = 'none';
+			}
+	});
+</script>
+
+{% endblock content %}

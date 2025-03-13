@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: htmx
+Version: 0.0.0
+Summary: Build web apps with Python, HTMX and Tailwind CSS
+License: MIT
+Author: CJ Lazell
+Author-email: cjlazell@gmail.com
+Requires-Python: >=3.7,<4.0
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Dist: nicegui (>=1.2.9)
+Requires-Dist: pydantic (>=1.10.7,<2.0.0)
+Description-Content-Type: text/markdown
+
+Coming Soon!
+
