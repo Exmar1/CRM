@@ -22,10 +22,20 @@
 <script>
 	document.getElementById('open-form-btn').addEventListener('click', function() {
 			var form = document.getElementById('task-form');
-			if (form.style.display === 'none') {
-					form.style.display = 'block';
-			} else {
-					form.style.display = 'none';
+			form.style.display = form.style.display === 'none' ? 'block' : 'none';
+	});
+
+	document.body.addEventListener("htmx:afterRequest", function(event) {
+			if (event.detail.successful) {
+					let formContainer = document.getElementById("task-form");  
+					let formElement = document.getElementById("task-form-element");  
+
+					if (formElement) {
+							formElement.reset(); 
+					}
+					if (formContainer) {
+							formContainer.style.display = "none"; 
+					}
 			}
 	});
 </script>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import TaskForm, CommunicationForm, InvoiceForm, ProjectForm
 from django.http import HttpResponse
 from .models import Task
+from django.http import JsonResponse
 # Create your views here.
 
 def home(request):
@@ -12,22 +13,22 @@ def home(request):
 def create_project(request):
 		if request.method == 'POST':
 			form = ProjectForm(request.POST)
-			task = None
-
 			if form.is_valid():
 				task = form.save()
-			return render(request, 'crm/task_item.html', {'task':task})
+				return render(request, 'crm/task_item.html', {'task':task})
+		
+			return JsonResponse({'error': 'Invalid form'}, status=400)
 
 		return HttpResponse(status=400)
 
 def create_task(request):
 	if request.method == 'POST':
 		form = TaskForm(request.POST)
-		task = None
-
 		if form.is_valid():
 			task = form.save()
-		return render(request, 'crm/task_item.html', {'task':task})
+			return render(request, 'crm/task_item.html', {'task':task})
+	
+		return JsonResponse({'error': 'Invalid form'}, status=400)
 	
 	return HttpResponse(status=400)
 
