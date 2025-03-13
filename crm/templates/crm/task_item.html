@@ -1,5 +1,11 @@
-<li>
+<li id="task-{{ task.id }}">
 	<strong>{{ task.name }}</strong>
 	<p>{{ task.description }}</p>
 	<p>Статус: {{ task.get_status_display }}</p>
+
+	<form hx-post="{% url 'delete_task' task.id %}" hx-target="#task-{{ task.id }}" hx-swap="delete">
+    {% csrf_token %}
+    <button type="submit">❌ Удалить</button>
+</form>
+
 </li>

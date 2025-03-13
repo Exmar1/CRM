@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import TaskForm, CommunicationForm, InvoiceForm, ProjectForm
 from django.http import HttpResponse
 from .models import Task
@@ -31,4 +31,10 @@ def create_task(request):
 		return JsonResponse({'error': 'Invalid form'}, status=400)
 	
 	return HttpResponse(status=400)
+
+def delete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)  
+    task.delete()  
+    return JsonResponse({'message': 'Задача удалена'}, status=200)
+
 
