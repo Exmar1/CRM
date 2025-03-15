@@ -37,4 +37,15 @@ def delete_task(request, task_id):
     task.delete()  
     return JsonResponse({'message': 'Задача удалена'}, status=200)
 
+def task_detail(request, task_id):
+	task = get_object_or_404(Task, id=task_id)
+	data = {
+		"id": task.id,
+		"name": task.name,
+		"description": task.description,
+		"status": task.get_status_display(),
+    }
+	return JsonResponse(data)
+
+
 

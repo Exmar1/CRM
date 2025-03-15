@@ -1,43 +1,32 @@
-{% extends "crm/base.html" %}
+{% extends "crm/base.html" %} {% load static %}
 
 {% block content %}
-<h1>Мои Задачи</h1>
+<div class="container">
+    <h1>Мои Задачи</h1>
 
-<button id='open-form-btn'>Добавить задачу</button>
+    <button id="open-form-btn" class="btn btn-primary">Добавить задачу</button>
 
-<div id='task-form' style='display: none;'>
-	<form hx-post="{% url 'create_task' %}" hx-target='#task-list' hx-swap='beforeend'>
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type='submit'>Сохранить</button>
-	</form>
+    <div id="task-form" style="display: none;">
+        <form id="task-form-element" hx-post="{% url 'create_task' %}" hx-target="#task-list" hx-swap="beforeend">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </form>
+    </div>
+
+    <div class="tasks-container">
+        <ul id="task-list">
+            {% for task in tasks %}
+                {% include 'crm/task_item.html' %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="task-menu" style="display: none;">
+        <h2 id="task-title"></h2>
+        <p id="task-description"></p>
+        <p><strong>Статус:</strong> <span id="task-status"></span></p>
+        <button onclick="closeTaskDetails()" class="btn btn-primary">Закрыть</button>
+    </div>
 </div>
-
-<ul id='task-list'>
-	{% for task in tasks %}
-		{% include 'crm/task_item.html' %}
-	{% endfor %}	
-</ul>
-
-<script>
-	document.getElementById('open-form-btn').addEventListener('click', function() {
-			var form = document.getElementById('task-form');
-			form.style.display = form.style.display === 'none' ? 'block' : 'none';
-	});
-
-	document.body.addEventListener("htmx:afterRequest", function(event) {
-			if (event.detail.successful) {
-					let formContainer = document.getElementById("task-form");  
-					let formElement = document.getElementById("task-form-element");  
-
-					if (formElement) {
-							formElement.reset(); 
-					}
-					if (formContainer) {
-							formContainer.style.display = "none"; 
-					}
-			}
-	});
-</script>
-
 {% endblock content %}

@@ -1,0 +1,176 @@
+/* Общие стили */
+body {
+	font-family: Arial, sans-serif;
+	line-height: 1.6;
+	margin: 0;
+	padding: 0;
+	background-color: #f8f9fa;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+header {
+	text-align: center;
+	margin-bottom: 30px;
+	padding: 15px 0;
+	background-color: #343a40;
+	color: #fff;
+}
+
+h1 {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+/* Кнопки */
+.btn {
+	display: inline-block;
+	padding: 8px 15px;
+	border-radius: 4px;
+	cursor: pointer;
+	border: none;
+	transition: background-color 0.3s;
+}
+
+.btn-primary {
+	background-color: #007bff;
+	color: white;
+}
+
+.btn-success {
+	background-color: #28a745;
+	color: white;
+}
+
+.btn-danger {
+	background-color: #dc3545;
+	color: white;
+}
+
+#open-form-btn {
+	display: block;
+	margin: 0 auto 20px auto;
+}
+
+/* Форма добавления задачи */
+#task-form {
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.1);
+	padding: 20px;
+	margin-bottom: 30px;
+}
+
+#task-form form {
+	margin: 0;
+}
+
+#task-form p {
+	margin-bottom: 15px;
+}
+
+#task-form input[type="text"],
+#task-form textarea,
+#task-form select {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+#task-form button[type="submit"] {
+	display: block;
+	margin: 0 auto;
+}
+
+/* Список задач */
+.tasks-container {
+	width: 100%;
+}
+
+#task-list {
+	list-style-type: none;
+	padding: 0;
+	width: 100%;
+}
+
+.task-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 15px;
+	margin-bottom: 10px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-item:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.task-name {
+	font-weight: bold;
+	flex: 2;
+}
+
+.task-status {
+	flex: 1;
+	text-align: center;
+	padding: 3px 8px;
+	border-radius: 12px;
+	background-color: #e9ecef;
+	font-size: 0.9em;
+}
+
+.task-desc {
+	flex: 3;
+	color: #6c757d;
+	padding: 0 15px;
+}
+
+.delete-btn {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+/* Меню деталей задачи */
+#task-menu {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 80%;
+	max-width: 500px;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+	padding: 25px;
+	z-index: 1000;
+}
+
+#task-menu h2 {
+	margin-top: 0;
+	border-bottom: 1px solid #dee2e6;
+	padding-bottom: 10px;
+}
+
+#task-menu p {
+	margin-bottom: 15px;
+}
+
+#task-menu button {
+	display: block;
+	margin: 20px auto 0;
+}
