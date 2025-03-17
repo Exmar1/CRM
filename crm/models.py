@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.timezone import now
 # Create your models here.
  
 class CustomUser(AbstractUser):
@@ -54,11 +55,33 @@ class Task(models.Model):
 	description = models.CharField(max_length=350, null=True, blank=True)
 	status = models.CharField(max_length=45, choices=TASK_CHOICES, null=False, blank=False)
 
+class Message(models.Model):
+	task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='messages')
+	text = models.TextField()
+	created_at = models.DateTimeField(auto_now_add=True)
+
 class Communication(models.Model):
-	message = models.TextField(null=True, blank=True)
-	calls = models.TextField(null=True, blank=True)
-	letters = models.TextField(null=True, blank=True)
+	TAG_CHOICES = [
+			('requirement', 'Требование'),
+			('clarification', 'Уточнение'),
+			('revision', 'Правки'),
+			('deadline', 'Дедлайн'),
+			('payment', 'Оплата'),
+	]
+
+	task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='communications')
+	message = models.TextField(verbose_name="Текст заметки")
+	tag = models.CharField(max_length=50, choices=TAG_CHOICES, blank=True, verbose_name="Тег")
+	custom_tag = models.CharField(max_length=50, blank=True, verbose_name='Свой тег')
+	file = models.FileField(upload_to='communications_files/', blank=True, null=True, verbose_name='Файл')
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	def get_tag_display_name(self):
+		return dict(self.TAG_CHOICES).get(self.tag, self.custom_tag)
 	
+	def __str__(self):
+		return f"Заметка ({self.get_tag_display_name()}) - {self.message[:20]}"
+		
 class Invoice(models.Model):
 	ORDER_CHOICES = [
 		('pending', 'Оплата ожидает'),

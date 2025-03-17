@@ -1,0 +1,34 @@
+<h1>История переписки с клиентом</h1>
+
+<form method='post' enctype='multipart/form-data'>
+	{% csrf_token %}
+
+	<label for='id_message'>Заметка:</label>
+	{{ form.message }}
+
+	<label for='id_tag'>Выберите тег:</label>
+	{{ form.tag }}
+
+	<label for='id_custom_tag'>Или введите свой тег:</label>
+	{{ form.custom_tag }}
+
+	<label for='id_file'>Прикрепить Файл:</label>
+	{{ form.file }}
+
+	<button type='submit'>Сохранить</button>
+</form>
+
+<h3>История записей</h3>
+<div id='messages-list'>
+	{% for comm in communications %}
+		<div class='message-block'>
+			<p><strong>{{ comm.tag }}</strong>: {{ comm.message }}</p>
+			{% if comm.file %}
+				<a href='{{ comm.file.url }}' download>📎 Скачать файл</a>
+			{% endif %}
+			<p class='date'>{{ comm.created_at|date:"d.m.Y H:i" }}</p>
+		</div>
+		{% empty %}
+			<p>Записей пока нет.</p>
+		{% endfor %}
+</div>

@@ -25,16 +25,16 @@ class TaskForm(forms.ModelForm):
 		}
 
 class CommunicationForm(forms.ModelForm):
-	class Meta:
-		model = Communication
-		fields = ['message', 'calls', 'letters']
-
-		widgets = {
-			'message':forms.Textarea(attrs={'class':'form-control', 'rows':4, 'placeholder': 'Сообщения'}),
-			'calls':forms.Textarea(attrs={'class':'form-control', 'placeholder': 'Звонки'}),
-			'letters':forms.Textarea(attrs={'class':'form-control', 'placeholder': 'Письма'}),
-		}
-
+    custom_tag = forms.CharField(required=False, label='Свой тег')
+    
+    class Meta:
+        model = Communication 
+        fields = ['message', 'tag', 'custom_tag', 'file']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows':3, 'placeholder':'Вставьте важную информацию из переписки или добавьте свою заметку...'}),
+            'tag': forms.Select(choices=Communication.TAG_CHOICES)
+        }
+		
 class InvoiceForm(forms.ModelForm):
 	class Meta:
 		model = Invoice

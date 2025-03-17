@@ -1,0 +1,12 @@
+{% block content %}
+<h1>Детали Задачи</h1>
+
+<div class='task-detail'>
+	<h2>{{ task.name }}</h2>
+	<p><strong>Описание:</strong> {{ task.description }}</p>
+	<p><strong>Статус:</strong> {{ task.get_status_display }}</p>
+	<a href="{% url 'home' %}" Назад к списку задач></a>
+</div>
+
+<a href="{% url 'task_message' task.id %}">Переписка</a>
+{% endblock content %}

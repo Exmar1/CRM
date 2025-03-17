@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import TaskForm, CommunicationForm, InvoiceForm, ProjectForm
 from django.http import HttpResponse
-from .models import Task
+from .models import Task, Message, Communication
 from django.http import JsonResponse
 # Create your views here.
 
@@ -39,13 +39,50 @@ def delete_task(request, task_id):
 
 def task_detail(request, task_id):
 	task = get_object_or_404(Task, id=task_id)
-	data = {
-		"id": task.id,
-		"name": task.name,
-		"description": task.description,
-		"status": task.get_status_display(),
-    }
-	return JsonResponse(data)
+	return render(request, 'crm/task_detail.html', {'task': task})
+
+def task_message(request, task_id):
+	task = get_object_or_404(Task, id=task_id)
+	messages = Message.objects.filter(task=task)
+	communications = Communication.objects.filter(task=task).order_by('-created_at') 
+	
+	if request.method == 'POST':
+			form = CommunicationForm(request.POST, request.FILES)
+			if form.is_valid():
+					communication = form.save(commit=False)
+					communication.task = task
+					if not communication.tag and form.cleaned_data['custom_tag']:
+							communication.tag = form.cleaned_data['custom_tag']
+					communication.save()
+					return redirect('task_message', task_id=task.id)
+	else:
+			form = CommunicationForm()
+	
+	return render(request, 'crm/task_message.html', {
+			'task': task, 
+			'messages': messages,
+			'form': form,
+			'communications': communications, 
+	})
+
+def add_communication(request, task_id):
+	task = get_object_or_404(Task, id=task_id)
+
+	if request.method == 'POST':
+		form = CommunicationForm(request.POST, request.FILES)
+		if form.is_valid():
+			communication = form.save(commit=False)
+			communication.task = task
+			if not communication.tag:
+				communication.tag = communication.custom_tag
+			communication.save()
+			return redirect('task_edit', task_id=task.id)
+	else:
+		form = CommunicationForm()
+
+	return render(request, 'crm/add_communication.html', {'form':form, 'task':task})
+
+
 
 
 

@@ -1,6 +1,8 @@
-<li id="task-{{ task.id }}" class="task-item" data-task-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-	<span class="task-name">{{ task.name }}</span>
-	<span class="task-status">{{ task.get_status_display }}</span>
-	<span class="task-desc">{{ task.description|truncatechars:30 }}</span>
-	<button class="delete-btn" data-task-id="{{ task.id }}" onclick="deleteTask(event, {{ task.id }})">Удалить</button>
+<li id='task-{{ task.id }}' class='task-item'>
+	<a href="{% url 'task_detail' task.id %}">
+		<span class='task-name'>{{ task.name }}</span>
+		<span class='task-status'>{{ task.get_status_display }}</span>
+		<span class='task-desc'>{{ task.description|truncatechars:30 }}</span>
+  </a>
+	<button class='delete-btn' data-task-id='{{ task.id }}'>Удалить</button>
 </li>
