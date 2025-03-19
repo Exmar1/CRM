@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import Task, Message, Communication
 from django.http import JsonResponse
 from django.urls import reverse
+from django.db.models import Q 
 # Create your views here.
 
 def home(request):
@@ -57,27 +58,36 @@ def task_detail(request, task_id):
 	return render(request, 'crm/task_detail.html', {'task': task})
 
 def task_message(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+	task = get_object_or_404(Task, id=task_id)
 
-    communications = Communication.objects.filter(task=task).order_by('-created_at')
+	query = request.GET.get('q', '')
 
-    if request.method == 'POST':
-        form = CommunicationForm(request.POST, request.FILES)
-        if form.is_valid():
-            communication = form.save(commit=False)
-            communication.task = task  # Привязываем заметку к задаче
-            if not communication.tag and form.cleaned_data['custom_tag']:
-                communication.tag = form.cleaned_data['custom_tag']
-            communication.save()
-            return redirect('task_message', task_id=task.id)
-    else:
-        form = CommunicationForm()
+	communications = Communication.objects.filter(task=task).order_by('-created_at')
 
-    return render(request, 'crm/task_message.html', {
-        'task': task,
-        'form': form,
-        'communications': communications 
-    })
+	if query:
+		communications = communications.filter(
+			Q(message__icontains=query) |
+			Q(tag__icontains=query)
+		)
+
+	if request.method == 'POST':
+			form = CommunicationForm(request.POST, request.FILES)
+			if form.is_valid():
+					communication = form.save(commit=False)
+					communication.task = task  # Привязываем заметку к задаче
+					if not communication.tag and form.cleaned_data['custom_tag']:
+							communication.tag = form.cleaned_data['custom_tag']
+					communication.save()
+					return redirect('task_message', task_id=task.id)
+	else:
+			form = CommunicationForm()
+
+	return render(request, 'crm/task_message.html', {
+			'task': task,
+			'form': form,
+			'communications': communications,
+			'query': query,
+	})
 
 def add_communication(request, task_id):
 	task = get_object_or_404(Task, id=task_id)

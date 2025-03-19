@@ -10,40 +10,44 @@
     <hr>
 
     <h4>Заметки:</h4>
-    {% if communications %}
-        <div class="list-group">
-            {% for comm in communications %}
-                <div class="list-group-item mb-3">
-                    <p><strong>Сообщение:</strong> {{ comm.message }}</p>
-                    <p><strong>Тег:</strong> {{ comm.tag }}</p>
 
-                    {% if comm.file %}
-                        <p><strong>Файл:</strong> 
-                            <a href="{{ comm.file.url }}" download>{{ comm.file.name }}</a>
-                        </p>
-                    {% endif %}
+	<form method="GET" action="" class="mb-3">
+		<div class="input-group">
+				<input type="text" name="q" class="form-control" placeholder="Поиск по тексту и тегам..." value="{{ query }}">
+				<button type="submit" class="btn btn-primary">🔎 Искать</button>
+		</div>
+</form>
 
-                    <p class="text-muted">Создано: {{ comm.created_at|date:"d.m.Y H:i" }}</p>
+{% if communications %}
+<div class="list-group">
+		{% for comm in communications %}
+				<div class="list-group-item mb-3">
+						<p><strong>Сообщение:</strong> {{ comm.message }}</p>
+						<p><strong>Тег:</strong> {{ comm.tag }}</p>
 
-                    <div class="d-flex justify-content-end">
-                        <a href="{% url 'edit_communication' comm.id %}" class="btn btn-warning btn-sm me-2">Редактировать</a>
-                        {% if comm.id %}
-                            <a href="{% url 'delete_communication' comm.id %}" class='btn btn-danger bnt-sm'>Удалить</a>
-                        {% else %}
-                            <span class='text-muted'>Нельзя Удалить</span>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>Заметок пока нет.</p>
-    {% endif %}
+						{% if comm.file %}
+								<p><strong>Файл:</strong> 
+										<a href="{{ comm.file.url }}" download>{{ comm.file.name }}</a>
+								</p>
+						{% endif %}
+
+						<p class="text-muted">Создано: {{ comm.created_at|date:"d.m.Y H:i" }}</p>
+
+						<div class="d-flex justify-content-end">
+								<a href="{% url 'edit_communication' comm.id %}" class="btn btn-warning btn-sm me-2">Редактировать</a>
+								<a href="{% url 'delete_communication' comm.id %}" class='btn btn-danger btn-sm'>Удалить</a>
+						</div>
+				</div>
+		{% endfor %}
+</div>
+{% else %}
+<p class="text-muted">🔍 Ничего не найдено по вашему запросу.</p>
+{% endif %}
 
     <hr>
 
     <h4>Добавить новую заметку:</h4>
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class='mb-3'>
         {% csrf_token %}
         <div class="mb-3">
             {{ form.as_p }}
@@ -52,4 +56,5 @@
         <a href="{% url 'home' %}" class="btn btn-secondary">Назад</a>
     </form>
 </div>
+
 {% endblock %}
