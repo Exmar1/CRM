@@ -1,0 +1,45 @@
+{% extends "crm/base.html" %}
+
+{% block title %}Добавить заметку{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Добавить новую заметку</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_message" class="form-label">Сообщение</label>
+            <textarea name="message" id="id_message" class="form-control" rows="5" required>{{ form.message.value|default:'' }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_tag" class="form-label">Тег (выбрать)</label>
+            <select name="tag" id="id_tag" class="form-select">
+                <option value="" {% if not form.tag.value %}selected{% endif %}>Выберите тег</option>
+                <option value="Требование" {% if form.tag.value == "Требование" %}selected{% endif %}>Требование</option>
+                <option value="Уточнение" {% if form.tag.value == "Уточнение" %}selected{% endif %}>Уточнение</option>
+                <option value="Правки" {% if form.tag.value == "Правки" %}selected{% endif %}>Правки</option>
+                <option value="Дедлайн" {% if form.tag.value == "Дедлайн" %}selected{% endif %}>Дедлайн</option>
+                <option value="Оплата" {% if form.tag.value == "Оплата" %}selected{% endif %}>Оплата</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_custom_tag" class="form-label">Или введите свой тег</label>
+            <input type="text" name="custom_tag" id="id_custom_tag" class="form-control" placeholder="Введите кастомный тег" value="{{ form.custom_tag.value|default:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_file" class="form-label">Прикрепить файл (необязательно)</label>
+            <input type="file" name="file" id="id_file" class="form-control">
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+            <a href="{% url 'task_message' task.id %}" class="btn btn-secondary">Назад</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

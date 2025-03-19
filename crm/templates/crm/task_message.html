@@ -1,34 +1,55 @@
-<h1>История переписки с клиентом</h1>
+{% extends "crm/base.html" %}
 
-<form method='post' enctype='multipart/form-data'>
-	{% csrf_token %}
+{% block title %}Переписка по задаче{% endblock %}
 
-	<label for='id_message'>Заметка:</label>
-	{{ form.message }}
+{% block content %}
+<div class="container mt-4">
+    <h2>Переписка по задаче: {{ task.title }}</h2>
+    <p>{{ task.description }}</p>
 
-	<label for='id_tag'>Выберите тег:</label>
-	{{ form.tag }}
+    <hr>
 
-	<label for='id_custom_tag'>Или введите свой тег:</label>
-	{{ form.custom_tag }}
+    <h4>Заметки:</h4>
+    {% if communications %}
+        <div class="list-group">
+            {% for comm in communications %}
+                <div class="list-group-item mb-3">
+                    <p><strong>Сообщение:</strong> {{ comm.message }}</p>
+                    <p><strong>Тег:</strong> {{ comm.tag }}</p>
 
-	<label for='id_file'>Прикрепить Файл:</label>
-	{{ form.file }}
+                    {% if comm.file %}
+                        <p><strong>Файл:</strong> 
+                            <a href="{{ comm.file.url }}" download>{{ comm.file.name }}</a>
+                        </p>
+                    {% endif %}
 
-	<button type='submit'>Сохранить</button>
-</form>
+                    <p class="text-muted">Создано: {{ comm.created_at|date:"d.m.Y H:i" }}</p>
 
-<h3>История записей</h3>
-<div id='messages-list'>
-	{% for comm in communications %}
-		<div class='message-block'>
-			<p><strong>{{ comm.tag }}</strong>: {{ comm.message }}</p>
-			{% if comm.file %}
-				<a href='{{ comm.file.url }}' download>📎 Скачать файл</a>
-			{% endif %}
-			<p class='date'>{{ comm.created_at|date:"d.m.Y H:i" }}</p>
-		</div>
-		{% empty %}
-			<p>Записей пока нет.</p>
-		{% endfor %}
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'edit_communication' comm.id %}" class="btn btn-warning btn-sm me-2">Редактировать</a>
+                        {% if comm.id %}
+                            <a href="{% url 'delete_communication' comm.id %}" class='btn btn-danger bnt-sm'>Удалить</a>
+                        {% else %}
+                            <span class='text-muted'>Нельзя Удалить</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Заметок пока нет.</p>
+    {% endif %}
+
+    <hr>
+
+    <h4>Добавить новую заметку:</h4>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-success">Добавить</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">Назад</a>
+    </form>
 </div>
+{% endblock %}

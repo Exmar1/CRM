@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='container mt-5'>
+	<h2 class='mb-4'>Редактирование Заметки</h2>
+
+	<form method='POST' enctype='multipart/form-data' class='card p-4 shadow-sm'>
+		{% csrf_token %}
+		
+		{% if form.errors %}
+			<div class='alert alert-danger'>
+				<strong>Ошибка!</strong>Пожалуйста, исправьте следующие ошибки:
+				<ul>
+					{% for field, errors in form.errors.items %}
+						{% for error in errors %}
+							<li>{{ field|capfirst }}: {{ errors }}</li>
+						{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
+
+			<div class='form-group'>
+				<label for='id_message'>Сообщение:</label>
+				{{ form.message }}
+			</div>
+
+			<div class='form-group mt-3'>
+				<label for='id_tag'>Тег:</label>
+				{{ form.tag }}
+			</div>
+
+			<div class='form-group mt-3'>
+				<label for='id_custom_tag'>Новый тег (если нужно):</label>
+				{{ form.custom_tag }}
+			</div>
+
+			<div class='form-group mt-3'>
+				<label for='id_file'>Файл (если нужно):</label>
+				{{ form.file }}
+			</div>
+
+			<div class='mt-4 d-flex justify-content-between'>
+				<button type='submit' class='btn btn-success'>Сохранить</button>
+				<a href="{% url 'task_message' message.task.id %}" class='btn btn-secondary'>Отмена</a>
+			</div>
+		</form>
+	</div>
+{% endblock content %}
