@@ -42,18 +42,37 @@ class Project(models.Model):
 	status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='new', null=False, blank=False)
 
 class Task(models.Model):
-	TASK_CHOICES = [
-		('not_started', 'Задача не начата'),
-		('in_progress', 'Задача в процессе'),
-		('completed', 'Задача завершена'),
-		('on_hold', 'Задача приостановлена'),
-		('blocked', 'Задача заблокирована'),
-		('canceled', 'Задача отменена'),
-		('waiting_for_review', 'Задача ожидает проверки или одобрения')
-	]
-	name = models.CharField(max_length=100, null=False, blank=False)
-	description = models.CharField(max_length=350, null=True, blank=True)
-	status = models.CharField(max_length=45, choices=TASK_CHOICES, null=False, blank=False)
+    TASK_CHOICES = [
+        ('not_started', 'Задача не начата'),
+        ('in_progress', 'Задача в процессе'),
+        ('completed', 'Задача завершена'),
+        ('on_hold', 'Задача приостановлена'),
+        ('blocked', 'Задача заблокирована'),
+        ('canceled', 'Задача отменена'),
+        ('waiting_for_review', 'Задача ожидает проверки')
+    ]
+
+    PRIORITY_CHOICES = [
+        ('low', 'Низкий'),
+        ('medium', 'Средний'),
+        ('high', 'Высокий')
+    ]
+
+    name = models.CharField(max_length=100, null=False, blank=False)
+    description = models.CharField(max_length=350, null=True, blank=True)
+    status = models.CharField(max_length=45, choices=TASK_CHOICES, null=False, blank=False)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+
+    deadline = models.DateTimeField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_overdue(self):
+        """Проверка, просрочен ли дедлайн"""
+        return self.deadline and self.deadline < now()
+
+    def __str__(self):
+        return f"{self.name} ({self.get_priority_display()})"
 
 class Message(models.Model):
 	task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='messages')

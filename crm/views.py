@@ -59,12 +59,28 @@ def delete_communication(request, communication_id):
 def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id)
 
+    recent_notes = Communication.objects.filter(task=task).order_by('-created_at')[:5]
+
     context = {
         'task': task,
-        'task_choices': Task.TASK_CHOICES
+        'recent_notes': recent_notes
     }
-
+    
     return render(request, 'crm/task_detail.html', context)
+
+def edit_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)  #
+        if form.is_valid():
+            form.save()
+            return redirect('task_detail', task_id=task.id)
+
+    else:
+        form = TaskForm(instance=task)
+
+    return render(request, 'crm/edit_task.html', {'form': form, 'task': task})
 
 def update_task_status(request, task_id):
     """Простая вьюха для изменения статуса задачи"""

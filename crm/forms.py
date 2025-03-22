@@ -16,12 +16,15 @@ class ProjectForm(forms.ModelForm):
 class TaskForm(forms.ModelForm):
 	class Meta:
 		model = Task
-		fields = ['name', 'description', 'status']
+		fields = ['name', 'description', 'status', 'priority', 'deadline']  
 
 		widgets = {
-			'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Введите название задачи'}),
-			'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Введите описание задачи'}),
-			'status': forms.Select(attrs={'class':'form-select'}),
+				'name': forms.TextInput(attrs={'class': 'form-control'}),
+				'description': forms.Textarea(attrs={'class': 'form-control'}),
+				'status': forms.Select(attrs={'class': 'form-control'}),
+				'priority': forms.Select(attrs={'class': 'form-control'}),
+				
+				'deadline': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
 		}
 
 class CommunicationForm(forms.ModelForm):

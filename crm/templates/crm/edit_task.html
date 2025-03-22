@@ -1,0 +1,15 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+<h1>✏️ Редактирование задачи</h1>
+
+<form method="POST" action="">
+    {% csrf_token %}
+    
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-success">💾 Сохранить изменения</button>
+    <a href="{% url 'task_detail' task.id %}" class="btn btn-secondary">🔙 Назад</a>
+</form>
+
+{% endblock %}
