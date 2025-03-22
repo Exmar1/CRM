@@ -11,12 +11,39 @@
 
     <h4>Заметки:</h4>
 
-	<form method="GET" action="" class="mb-3">
-		<div class="input-group">
-				<input type="text" name="q" class="form-control" placeholder="Поиск по тексту и тегам..." value="{{ query }}">
-				<button type="submit" class="btn btn-primary">🔎 Искать</button>
-		</div>
-</form>
+		<form method="GET" action="" class="mb-3">
+			<div class='row g-3 align-items-center'>
+					<div class="col-md-6">
+							<div class="input-group">
+									<input type="text" name="q" class="form-control" placeholder="Поиск по тексту и тегам..." value="{{ query }}">
+									<button type="submit" class="btn btn-primary">🔎 Искать</button>
+							</div>
+					</div>
+	
+					<div class='col-md-2'>
+							<select name='date_filter' class='form-select'>
+									<option value=''>Все даты</option>
+									<option value='today' {% if date_filter == 'today' %}selected{% endif %}>Сегодня</option>
+									<option value="week" {% if date_filter == 'week' %}selected{% endif %}>Последняя неделя</option>
+									<option value="month" {% if date_filter == 'month' %}selected{% endif %}>Последний месяц</option>
+							</select>
+					</div>
+	
+					<div class='col-md-2'>
+							<select name='tag_filter' class='form-select'>
+									<option value=''>Все теги</option>
+									{% for tag in tags %}
+											<option value='{{ tag }}' {% if tag == tag_filter %}selected{% endif %}>{{ tag }}</option>
+									{% endfor %}
+							</select>
+					</div>
+	
+					<div class='col-md-2'>
+							<button type='submit' class='btn btn-primary w-100'>🔎 Применить фильтры</button>
+					</div>
+			</div>
+	</form>
+
 
 {% if communications %}
 <div class="list-group">

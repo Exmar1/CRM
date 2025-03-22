@@ -2,11 +2,24 @@
 <h1>Детали Задачи</h1>
 
 <div class='task-detail'>
-	<h2>{{ task.name }}</h2>
-	<p><strong>Описание:</strong> {{ task.description }}</p>
-	<p><strong>Статус:</strong> {{ task.get_status_display }}</p>
-	<a href="{% url 'home' %}" Назад к списку задач></a>
-</div>
+    <h2>{{ task.name }}</h2>
+    <p><strong>Описание:</strong> {{ task.description }}</p>
+    <p><strong>Текущий статус:</strong> {{ task.get_status_display }}</p>
+    
+    <form method="POST" action="{% url 'update_task_status' task.id %}">
+        {% csrf_token %}
+        
+        <label for="status">Изменить статус:</label>
+        <select name="status" id="status" class="form-control">
+            {% for value, label in task.TASK_CHOICES %}
+            <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
 
-<a href="{% url 'task_message' task.id %}">Переписка</a>
-{% endblock content %}
+        <button type="submit" class="btn btn-primary mt-2">💾 Сохранить</button>
+    </form>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">🔙 Назад к списку задач</a>
+{% endblock %}

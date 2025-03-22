@@ -21,25 +21,21 @@ from crm import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 	
-    #Home
-	path('',  views.home, name='home'),
-	
-	path('create-project/', views.create_project, name='create_project'),
-	
-	path('create_task/', views.create_task, name='create_task'),
-	
-	path('task/<int:task_id>/delete/', views.delete_task, name='delete_task'),
-	
-	path('task-details/<int:task_id>/', views.task_detail, name='task_detail'),
-	
-	path('task-message/<int:task_id>/', views.task_message, name='task_message'),
-	
-	path('task/<int:task_id>/add-communication/', views.add_communication, name='add_communication'),
-	
-	path('edit-message/<int:message_id>/', views.edit_message, name='edit_message'),
-	
+    # Основные маршруты
+    path('', views.home, name='home'),
+    path('create-project/', views.create_project, name='create_project'),
+    path('create_task/', views.create_task, name='create_task'),
+    
+    # Динамическое обновление статуса задачи
+    path('task/<int:task_id>/update-status/', views.update_task_status, name='update_task_status'),
+
+    path('task/<int:task_id>/delete/', views.delete_task, name='delete_task'),
+    path('task-details/<int:task_id>/', views.task_detail, name='task_detail'),
+    path('task-message/<int:task_id>/', views.task_message, name='task_message'),
+    
+    # Другие маршруты
+    path('task/<int:task_id>/add-communication/', views.add_communication, name='add_communication'),
+    path('edit-message/<int:message_id>/', views.edit_message, name='edit_message'),
     path('communication/<int:communication_id>/edit/', views.edit_communication, name='edit_communication'),
-		
     path('communication/<int:communication_id>/delete/', views.delete_communication, name='delete_communication'),
-	 
 ]
