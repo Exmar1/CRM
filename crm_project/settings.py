@@ -121,6 +121,7 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+LOGIN_URL = 'login'
 AUTH_USER_MODEL = 'crm.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

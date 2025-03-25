@@ -7,12 +7,24 @@
     <script src="https://unpkg.com/htmx.org"></script>
     <script src="{% static 'crm/js/script.js' %}"></script>
     <script src="{% static 'crm/js/tasks.js' %}"></script>
+
     <link rel="stylesheet" href="{% static 'crm/css/style.css' %}">
+
     <title>{% block title %} CRM для фрилансеров{% endblock %}</title>
 </head>
+
 <body>
     <header>
         <h1>CRM для фрилансеров</h1>
+        <nav>
+            {% if user.is_authenticated %}
+                <p>👋 Привет, {{ user.username }}!</p>
+                <a href="{% url 'logout' %}" class="btn btn-danger">🚪 Выйти</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">🔑 Войти</a>
+                <a href="{% url 'register' %}" class="btn btn-success">🛡️ Регистрация</a>
+            {% endif %}
+        </nav>
     </header>
 
     <main>

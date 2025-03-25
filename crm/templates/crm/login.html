@@ -1,0 +1,13 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+<h1>🔑 Вход</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">✅ Войти</button>
+    <a href="{% url 'register' %}" class="btn btn-secondary">🛡️ Нет аккаунта? Зарегистрироваться</a>
+</form>
+{% endblock %}

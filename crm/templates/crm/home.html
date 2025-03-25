@@ -7,10 +7,11 @@
     <button id="open-form-btn" class="btn btn-primary">Добавить задачу</button>
 
     <div id="task-form" style="display: none;">
-        <form id="task-form-element" hx-post="{% url 'create_task' %}" hx-target="#task-list" hx-swap="beforeend">
+        <form id="task-form-element" method="POST" action="{% url 'create_task' %}">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-success">Сохранить</button>
+            <button type="button" class="btn btn-secondary" onclick="toggleTaskForm()">Отмена</button>
         </form>
     </div>
 
@@ -29,4 +30,38 @@
         <button onclick="closeTaskDetails()" class="btn btn-primary">Закрыть</button>
     </div>
 </div>
+
+<script>
+function toggleTaskForm() {
+    var taskForm = document.getElementById('task-form');
+    taskForm.style.display = taskForm.style.display === 'none' ? 'block' : 'none';
+}
+
+document.getElementById('task-form-element').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = e.target;
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+        // Добавляем новую задачу в список
+        document.getElementById('task-list').insertAdjacentHTML('beforeend', html);
+        
+        // Очищаем форму
+        form.reset();
+        
+        // Скрываем форму
+        toggleTaskForm();
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+});
+</script>
 {% endblock content %}

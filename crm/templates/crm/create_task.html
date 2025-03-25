@@ -1,0 +1,17 @@
+{% extends "crm/base.html" %}
+
+{% block content %}
+    <h1>✅ Создание задачи</h1>
+
+    {% if error_message %}
+        <p class="text-danger">{{ error_message }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-success">💾 Создать задачу</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">🔙 Вернуться на главную</a>
+    </form>
+{% endblock %}

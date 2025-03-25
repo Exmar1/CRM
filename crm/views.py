@@ -7,13 +7,57 @@ from django.urls import reverse
 from django.db.models import Q 
 from django.utils.timezone import now, timedelta
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from .forms import RegistrationForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 import json
+
 # Create your views here.
 
+@login_required
 def home(request):
-	form = TaskForm()
-	tasks = Task.objects.all()
-	return render(request, 'crm/home.html', {'form': form, 'tasks':tasks})
+    tasks = Task.objects.filter(owner=request.user)
+    form = TaskForm()  # Создаем форму для передачи в шаблон
+    return render(request, 'crm/home.html', {
+        'tasks': tasks, 
+        'form': form  # Передаем форму в шаблон
+    })
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = RegistrationForm()
+
+    return render(request, 'crm/register.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, 'Вы успешно вошли в систему!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Неверный логин или пароль.')
+    else:
+        form = AuthenticationForm()
+    
+    return render(request, 'crm/login.html', {'form': form})
+
+def user_logout(request):
+    logout(request)
+    messages.info(request, 'Вы вышли из системы.')
+    return redirect(reverse('home')) 
 
 def create_project(request):
 		if request.method == 'POST':
@@ -26,16 +70,23 @@ def create_project(request):
 
 		return HttpResponse(status=400)
 
+@login_required
 def create_task(request):
-	if request.method == 'POST':
-		form = TaskForm(request.POST)
-		if form.is_valid():
-			task = form.save()
-			return render(request, 'crm/task_item.html', {'task':task})
-	
-		return JsonResponse({'error': 'Invalid form'}, status=400)
-	
-	return HttpResponse(status=400)
+    if request.method == "POST":
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.owner = request.user  # Важно: устанавливаем владельца задачи
+            task.save()
+            # Возвращаем частичный ответ для обновления списка задач
+            return render(request, 'crm/task_item.html', {'task': task})
+        else:
+            # Если форма невалидна, возвращаем ошибки
+            return JsonResponse({'errors': form.errors}, status=400)
+    
+    # Для GET-запроса передаем пустую форму
+    form = TaskForm()
+    return render(request, 'crm/home.html', {'form': form})
 
 def delete_task(request, task_id):
 	task = get_object_or_404(Task, id=task_id)
@@ -56,17 +107,14 @@ def delete_communication(request, communication_id):
 
 	return render(request, 'crm/delete_communication.html', {'communication': communication})
 
+@login_required
 def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id)
 
-    recent_notes = Communication.objects.filter(task=task).order_by('-created_at')[:5]
+    if task.owner != request.user:
+        return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
 
-    context = {
-        'task': task,
-        'recent_notes': recent_notes
-    }
-    
-    return render(request, 'crm/task_detail.html', context)
+    return render(request, 'crm/task_detail.html', {'task': task})
 
 def edit_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)

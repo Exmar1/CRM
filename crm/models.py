@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.timezone import now
+from django.conf import settings 
 # Create your models here.
  
 class CustomUser(AbstractUser):
@@ -64,8 +65,9 @@ class Task(models.Model):
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
 
     deadline = models.DateTimeField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def is_overdue(self):
         """Проверка, просрочен ли дедлайн"""
