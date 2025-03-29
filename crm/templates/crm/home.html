@@ -1,34 +1,71 @@
-{% extends "crm/base.html" %} {% load static %}
+{% extends "crm/base.html" %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'crm/css/style.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Мои Задачи</h1>
-
-    <button id="open-form-btn" class="btn btn-primary">Добавить задачу</button>
+    <div class="header-container">
+        <h1>Мои Задачи</h1>
+        <button id="open-form-btn" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Добавить задачу
+        </button>
+    </div>
 
     <div id="task-form" style="display: none;">
         <form id="task-form-element" method="POST" action="{% url 'create_task' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success">Сохранить</button>
-            <button type="button" class="btn btn-secondary" onclick="toggleTaskForm()">Отмена</button>
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="field-error">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="btn-container">
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <button type="button" class="btn btn-secondary" onclick="toggleTaskForm()">Отмена</button>
+            </div>
         </form>
     </div>
 
     <div class="tasks-container">
+        {% if tasks %}
         <ul id="task-list">
             {% for task in tasks %}
-                {% include 'crm/task_item.html' %}
+                <li class="task-item priority-{{ task.priority|lower }}">
+                    <span class="status-badge status-{{ task.status|slugify }}">{{ task.get_status_display }}</span>
+                    <h3>{{ task.name }}</h3>
+                    <p>{{ task.description|truncatechars:100 }}</p>
+                    <div class="task-meta">
+                        <span class="deadline">
+                            <i class="fa fa-calendar"></i> {{ task.deadline|date:"d.m.Y H:i" }}
+                        </span>
+                        <span class="priority">
+                            Приоритет: {{ task.get_priority_display }}
+                        </span>
+                    </div>
+                    <div class="task-actions">
+                        <a href="{% url 'task_detail' task_id=task.id %}">Подробности</a>
+                        <a href="{% url 'task_message' task_id=task.id %}">Коммуникации</a>
+                        <a href="{% url 'edit_task' task_id=task.id %}">Редактировать</a>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
+        {% else %}
+        <div class="empty-list">
+            <p>У вас пока нет задач. Создайте новую задачу, нажав на кнопку выше.</p>
+            <button onclick="toggleTaskForm()" class="btn btn-primary">Создать задачу</button>
+        </div>
+        {% endif %}
     </div>
 
-    <div id="task-menu" style="display: none;">
-        <h2 id="task-title"></h2>
-        <p id="task-description"></p>
-        <p><strong>Статус:</strong> <span id="task-status"></span></p>
-        <button onclick="closeTaskDetails()" class="btn btn-primary">Закрыть</button>
-    </div>
+    <button class="add-task-btn" onclick="toggleTaskForm()">+</button>
 </div>
 
 <script>
@@ -50,6 +87,20 @@ document.getElementById('task-form-element').addEventListener('submit', function
     })
     .then(response => response.text())
     .then(html => {
+        // Проверяем, есть ли элемент empty-list и удаляем его при создании первой задачи
+        var emptyList = document.querySelector('.empty-list');
+        if (emptyList) {
+            emptyList.remove();
+            
+            // Создаем список задач, если его нет
+            if (!document.getElementById('task-list')) {
+                var tasksContainer = document.querySelector('.tasks-container');
+                var taskList = document.createElement('ul');
+                taskList.id = 'task-list';
+                tasksContainer.appendChild(taskList);
+            }
+        }
+        
         // Добавляем новую задачу в список
         document.getElementById('task-list').insertAdjacentHTML('beforeend', html);
         
