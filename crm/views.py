@@ -113,8 +113,16 @@ def task_detail(request, task_id):
 
     if task.owner != request.user:
         return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
+    
+    recent_notes = Communication.objects.filter(task=task).order_by('-created_at')
+    
+    current_time = now()
 
-    return render(request, 'crm/task_detail.html', {'task': task})
+    return render(request, 'crm/task_detail.html', {
+        'task': task, 
+        'recent_notes': recent_notes,
+        'now': current_time
+    })
 
 def edit_task(request, task_id):
     task = get_object_or_404(Task, id=task_id)

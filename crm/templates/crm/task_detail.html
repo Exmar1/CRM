@@ -59,6 +59,9 @@
     <button type="submit" class="btn btn-primary mt-2">💾 Сохранить</button>
 </form>
 
+<a href="{% url 'task_message' task.id %}">Переписка</a>
+
+
 <h3 class="mt-4">📝 Последние заметки</h3>
 
 {% if recent_notes %}
