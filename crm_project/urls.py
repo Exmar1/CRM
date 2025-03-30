@@ -43,4 +43,5 @@ urlpatterns = [
     path('communication/<int:communication_id>/edit/', views.edit_communication, name='edit_communication'),
     path('task/<int:task_id>/edit/', views.edit_task, name='edit_task'), 
     path('communication/<int:communication_id>/delete/', views.delete_communication, name='delete_communication'),
+	path('cancel_form/', views.cancel_form, name='cancel_form'),
 ]

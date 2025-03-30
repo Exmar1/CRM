@@ -77,7 +77,7 @@
             {{ form.as_p }}
             <div class="btn-container">
                 <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button type="button" class="btn btn-secondary" id="cancel-task-btn">Отмена</button>
+                <a href="{% url 'cancel_form' %}" class="btn btn-secondary">Отмена</a>
             </div>
         </form>
     </div>

@@ -58,6 +58,10 @@ def user_logout(request):
     return redirect(reverse('home')) 
 
 @login_required
+def cancel_form(request):
+    return redirect('home')
+
+@login_required
 def create_task(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
