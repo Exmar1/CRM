@@ -1,11 +1,25 @@
-<li id='task-{{ task.id }}' class='task-item'>
-	<a href="{% url 'task_detail' task.id %}">
-		<span class='task-name'>{{ task.name }}</span>
-		<span class='task-status'>{{ task.get_status_display }}</span>
-		<span class='task-desc'>{{ task.description|truncatechars:30 }}</span>
-  </a>
-	<form method="POST" action="{% url 'delete_task' task.id %}" style="display:inline;" onsubmit="return confirm('Вы уверены, что хотите удалить эту задачу?');">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
-	</form>
-</li>	
+<li class="task-item priority-{{ task.priority|lower }}" data-id="{{ task.id }}" data-date="{{ task.deadline|date:'Y-m-d' }}">
+	<span class="status-badge status-{{ task.status|slugify }}">{{ task.get_status_display }}</span>
+	<h3>{{ task.name }}</h3>
+	<p>{{ task.description|truncatechars:100 }}</p>
+	
+	<!-- Прогресс-бар -->
+	<div class="task-progress">
+			<div class="progress-bar" style="width: {% if task.status == 'not_started' %}0%{% elif task.status == 'in_progress' %}50%{% else %}100%{% endif %}"></div>
+	</div>
+	
+	<div class="task-meta">
+			<span class="deadline" data-date="{{ task.deadline|date:'Y-m-d' }}">
+					<i class="fa fa-calendar"></i> {{ task.deadline|date:"d.m.Y H:i" }}
+			</span>
+			<span class="priority">
+					Приоритет: {{ task.get_priority_display }}
+			</span>
+	</div>
+	<div class="task-actions">
+			<a href="{% url 'task_detail' task_id=task.id %}">Подробности</a>
+			<a href="{% url 'task_message' task_id=task.id %}">Коммуникации</a>
+			<a href="{% url 'edit_task' task_id=task.id %}">Редактировать</a>
+			<a href="#" class="delete-btn" onclick="deleteTaskConfirm(event, {{ task.id }})">Удалить</a>
+	</div>
+</li>

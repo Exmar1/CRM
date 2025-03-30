@@ -15,15 +15,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 import json
 
-# Create your views here.
-
 @login_required
 def home(request):
     tasks = Task.objects.filter(owner=request.user)
-    form = TaskForm()  # Создаем форму для передачи в шаблон
+    form = TaskForm()
     return render(request, 'crm/home.html', {
         'tasks': tasks, 
-        'form': form  # Передаем форму в шаблон
+        'form': form
     })
 
 def register(request):
@@ -59,60 +57,61 @@ def user_logout(request):
     messages.info(request, 'Вы вышли из системы.')
     return redirect(reverse('home')) 
 
-def create_project(request):
-		if request.method == 'POST':
-			form = ProjectForm(request.POST)
-			if form.is_valid():
-				task = form.save()
-				return render(request, 'crm/task_item.html', {'task':task})
-		
-			return JsonResponse({'error': 'Invalid form'}, status=400)
-
-		return HttpResponse(status=400)
-
 @login_required
 def create_task(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.owner = request.user  # Важно: устанавливаем владельца задачи
+            task.owner = request.user
             task.save()
-            # Возвращаем частичный ответ для обновления списка задач
-            return render(request, 'crm/task_item.html', {'task': task})
+            
+            # Проверяем, является ли запрос AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                # Возвращаем только шаблон элемента задачи без лишнего контекста
+                return render(request, 'crm/task_item.html', {'task': task})
+            # Если обычный запрос, перенаправляем на главную
+            return redirect('home')
         else:
-            # Если форма невалидна, возвращаем ошибки
-            return JsonResponse({'errors': form.errors}, status=400)
+            # Если форма невалидна
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'errors': form.errors}, status=400)
+            # Для обычного запроса выводим форму с ошибками
+            return render(request, 'crm/home.html', {'form': form, 'tasks': Task.objects.filter(owner=request.user)})
     
-    # Для GET-запроса передаем пустую форму
-    form = TaskForm()
-    return render(request, 'crm/home.html', {'form': form})
+    # Перенаправление на главную для GET-запросов
+    return redirect('home')
 
+@login_required
 def delete_task(request, task_id):
-	task = get_object_or_404(Task, id=task_id)
-	
-	if request.method == "POST":
-			task.delete()
-			return redirect('home')
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
+    
+    if request.method == "POST" or request.method == "DELETE":  # Добавляем обработку DELETE
+        task.delete()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success'})
+        return redirect('home')
 
-	return render(request, 'crm/delete_confirmation.html', {'task': task})
+    return render(request, 'crm/delete_confirmation.html', {'task': task})
 
-def delete_communication(request, communication_id):
-	communication = get_object_or_404(Communication, id=communication_id)
+@login_required
+def get_stats(request):
+    user = request.user
+    new_tasks = Task.objects.filter(owner=user, status='not_started').count()
+    in_progress = Task.objects.filter(owner=user, status='in_progress').count()
+    completed = Task.objects.filter(owner=user, status='completed').count()
+    total = Task.objects.filter(owner=user).count()
 
-	if request.method == "POST":
-			task_id = communication.task.id  
-			communication.delete()
-			return redirect(reverse('task_message', args=[task_id]))
-
-	return render(request, 'crm/delete_communication.html', {'communication': communication})
+    return JsonResponse({
+        'new': new_tasks,
+        'in_progress': in_progress,
+        'completed': completed,
+        'total': total
+    })
 
 @login_required
 def task_detail(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
-
-    if task.owner != request.user:
-        return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
     
     recent_notes = Communication.objects.filter(task=task).order_by('-created_at')
     
@@ -124,11 +123,12 @@ def task_detail(request, task_id):
         'now': current_time
     })
 
+@login_required
 def edit_task(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
 
     if request.method == 'POST':
-        form = TaskForm(request.POST, instance=task)  #
+        form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             return redirect('task_detail', task_id=task.id)
@@ -138,10 +138,24 @@ def edit_task(request, task_id):
 
     return render(request, 'crm/edit_task.html', {'form': form, 'task': task})
 
+@login_required
+def create_project(request):
+    if request.method == 'POST':    
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.owner = request.user
+            project.save()
+            return redirect('project_list')  # или другая нужная вьюха
+    else:
+        form = ProjectForm()
+
+    return render(request, 'crm/create_project.html', {'form': form})
+
+@login_required
 def update_task_status(request, task_id):
-    """Простая вьюха для изменения статуса задачи"""
     if request.method == 'POST':
-        task = get_object_or_404(Task, id=task_id)
+        task = get_object_or_404(Task, id=task_id, owner=request.user)
 
         new_status = request.POST.get('status')
 
@@ -152,8 +166,9 @@ def update_task_status(request, task_id):
 
     return HttpResponse('Метод не разрешён', status=405)
 
+@login_required
 def task_message(request, task_id):
-    task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
 
     query = request.GET.get('q', '')
     date_filter = request.GET.get('date_filter', '')
@@ -189,8 +204,8 @@ def task_message(request, task_id):
         form = CommunicationForm(request.POST, request.FILES)
         if form.is_valid():
             communication = form.save(commit=False)
-            communication.task = task  # Привязываем заметку к задаче
-            if not communication.tag and form.cleaned_data['custom_tag']:
+            communication.task = task
+            if not communication.tag and form.cleaned_data.get('custom_tag'):
                 communication.tag = form.cleaned_data['custom_tag']
             communication.save()
             return redirect('task_message', task_id=task.id)
@@ -210,55 +225,58 @@ def task_message(request, task_id):
         'tags': tags, 
     })
 
+@login_required
 def add_communication(request, task_id):
-	task = get_object_or_404(Task, id=task_id)
+    task = get_object_or_404(Task, id=task_id, owner=request.user)
 
-	if request.method == 'POST':
-		form = CommunicationForm(request.POST, request.FILES)
-		if form.is_valid():
-			communication = form.save(commit=False)
-			communication.task = task
-			if not communication.tag:
-				communication.tag = communication.custom_tag
-			communication.save()
-			return redirect('task_edit', task_id=task.id)
-	else:
-		form = CommunicationForm()
+    if request.method == 'POST':
+        form = CommunicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            communication = form.save(commit=False)
+            communication.task = task
+            if not communication.tag:
+                communication.tag = form.cleaned_data.get('custom_tag', '')
+            communication.save()
+            return redirect('task_message', task_id=task.id)
+    else:
+        form = CommunicationForm()
 
-	return render(request, 'crm/add_communication.html', {'form':form, 'task':task})
+    return render(request, 'crm/add_communication.html', {'form': form, 'task': task})
 
-def edit_message(request, message_id):
-	message = get_object_or_404(Communication, id=message_id)
-
-	if request.method == 'POST':
-		form = CommunicationForm(request.POST, request.FILES, instance=message)
-		if form.is_valid():
-			form.save()
-			return redirect('task_message', task_id=message.task.id)
-		else:
-			form = CommunicationForm(instance=message)
-		return render(request, 'crm/edit_message.html', {
-			'form': form,
-			'message': message
-    })
-	
+@login_required
 def edit_communication(request, communication_id):
-	communication = get_object_or_404(Communication, id=communication_id)
+    communication = get_object_or_404(Communication, id=communication_id)
+    task = communication.task
+    
+    # Проверяем, что задача принадлежит текущему пользователю
+    if task.owner != request.user:
+        return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
 
-	if request.method == 'POST':
-			form = CommunicationForm(request.POST, request.FILES, instance=communication)
-			if form.is_valid():
-					form.save()
-					return redirect('task_message', task_id=communication.task.id)
-	else:
-			form = CommunicationForm(instance=communication)
+    if request.method == 'POST':
+        form = CommunicationForm(request.POST, request.FILES, instance=communication)
+        if form.is_valid():
+            form.save()
+            return redirect('task_message', task_id=task.id)
+    else:
+        form = CommunicationForm(instance=communication)
 
-	return render(request, 'crm/edit_communication.html', {
-			'form': form,
-			'communication': communication
-	})
+    return render(request, 'crm/edit_communication.html', {
+        'form': form,
+        'communication': communication
+    })
 
+@login_required
+def delete_communication(request, communication_id):
+    communication = get_object_or_404(Communication, id=communication_id)
+    task = communication.task
+    
+    # Проверяем, что задача принадлежит текущему пользователю
+    if task.owner != request.user:
+        return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
 
+    if request.method == "POST":
+        task_id = task.id
+        communication.delete()
+        return redirect(reverse('task_message', args=[task_id]))
 
-
-
+    return render(request, 'crm/delete_communication.html', {'communication': communication})

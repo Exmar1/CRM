@@ -31,6 +31,7 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
 
     # Задачи
+	path('get_stats/', views.get_stats, name='get_stats'),
 	path('task/<int:task_id>/update-status/', views.update_task_status, name='update_task_status'),
     path('create-project/', views.create_project, name='create_project'),
     path('create_task/', views.create_task, name='create_task'),
@@ -38,7 +39,7 @@ urlpatterns = [
     path('task-details/<int:task_id>/', views.task_detail, name='task_detail'),
     path('task-message/<int:task_id>/', views.task_message, name='task_message'),
     path('task/<int:task_id>/add-communication/', views.add_communication, name='add_communication'),
-    path('edit-message/<int:message_id>/', views.edit_message, name='edit_message'),
+    path('edit_communication/<int:communication_id>/', views.edit_communication, name='edit_communication'),
     path('communication/<int:communication_id>/edit/', views.edit_communication, name='edit_communication'),
     path('task/<int:task_id>/edit/', views.edit_task, name='edit_task'), 
     path('communication/<int:communication_id>/delete/', views.delete_communication, name='delete_communication'),
