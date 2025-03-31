@@ -3,91 +3,173 @@
 <div class="container">
     <h1>Детали Задачи</h1>
 
-    <div class='task-detail'>
-        <h2>{{ task.name }}</h2>
-        <p><strong>Описание:</strong> {{ task.description }}</p>
-        <p><strong>Текущий статус:</strong> {{ task.get_status_display }}</p>
-
-        <p>
-            <strong>Приоритет:</strong> 
-            <span class="badge 
-                    {% if task.priority == 'low' %}bg-success
-                    {% elif task.priority == 'medium' %}bg-warning
-                    {% elif task.priority == 'high' %}bg-danger
-                    {% endif %}">
-                    {{ task.get_priority_display }}
-            </span>
-        </p>
-
-        {% if task.deadline %}
-        <p>
-            <strong>Дедлайн:</strong> 
-            <span class="badge 
-                    {% if task.is_overdue %}bg-danger
-                    {% elif task.deadline|date:"U" < now|date:"U"|add:"86400" %}bg-warning
-                    {% else %}bg-success
-                    {% endif %}">
-                    {{ task.deadline|date:"d.m.Y H:i" }}
-            </span>
-        </p>
-        {% else %}
-        <p>💡 Дедлайн не установлен.</p>
-        {% endif %}
-        
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{% url 'edit_task' task.id %}" class="btn btn-warning">✏️ Редактировать задачу</a>
-    
-            <form method="POST" action="{% url 'delete_task' task.id %}" onsubmit="return confirm('Вы уверены, что хотите удалить эту задачу?');" class="d-inline m-0 p-0">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">🗑️ Удалить задачу</button>
-            </form>
-        </div>
-
-        <a href="{% url 'home' %}" class="btn btn-secondary mt-3">🔙 Назад к списку задач</a>
-    </div>
-
-    <form method="POST" action="{% url 'update_task_status' task.id %}" class="mt-4">
-        {% csrf_token %}
-        
-        <label for="status">Изменить статус:</label>
-        <select name="status" id="status" class="form-control">
-            {% for value, label in task.TASK_CHOICES %}
-            <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
-                {{ label }}
-            </option>
-            {% endfor %}
-        </select>
-
-        <button type="submit" class="btn btn-primary mt-2">💾 Сохранить</button>
-    </form>
-
-    <a href="{% url 'task_message' task.id %}">💬 Переписка</a>
-
-    <h3 class="mt-4">📝 Последние заметки</h3>
-
-    {% if recent_notes %}
-        <ul class="list-group">
-            {% for note in recent_notes %}
-            <li class="list-group-item">
-                <p><strong>Заметка:</strong> {{ note.message }}</p>
-                <p><strong>Тег:</strong> {{ note.tag }}</p>
+    <div class="task-layout">
+        <div class="main-content">
+            <div class='task-detail'>
+                <h2>{{ task.name }}</h2>
                 
-                {% if note.file %}
-                <p><strong>Файл:</strong> <a href="{{ note.file.url }}" download>📎 Скачать</a></p>
-                {% endif %}
+                <div class="task-info">
+                    <p><strong>Описание:</strong> {{ task.description }}</p>
+                    <p><strong>Текущий статус:</strong> {{ task.get_status_display }}</p>
+                    
+                    <p>
+                        <strong>Приоритет:</strong> 
+                        <span class="badge 
+                                {% if task.priority == 'low' %}bg-success
+                                {% elif task.priority == 'medium' %}bg-warning
+                                {% elif task.priority == 'high' %}bg-danger
+                                {% endif %}">
+                                {{ task.get_priority_display }}
+                        </span>
+                    </p>
 
-                <p class="text-muted">Создано: {{ note.created_at|date:"d.m.Y H:i" }}</p>
-
-                <div class="d-flex justify-content-end">
-                    <a href="{% url 'edit_communication' note.id %}" class="btn btn-warning btn-sm me-2">✏️ Редактировать</a>
-                    <a href="{% url 'delete_communication' note.id %}" class="btn btn-danger btn-sm">🗑️ Удалить</a>
+                    {% if task.deadline %}
+                    <p>
+                        <strong>Дедлайн:</strong> 
+                        <span class="badge 
+                                {% if task.is_overdue %}bg-danger
+                                {% elif task.deadline|date:"U" < now|date:"U"|add:"86400" %}bg-warning
+                                {% else %}bg-success
+                                {% endif %}">
+                                {{ task.deadline|date:"d.m.Y H:i" }}
+                        </span>
+                    </p>
+                    {% else %}
+                    <p>💡 Дедлайн не установлен.</p>
+                    {% endif %}
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p class="task-detail">💡 Заметок пока нет.</p>
-    {% endif %}
+                
+                <div class="task-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span>Создано: {{ task.created_at|date:"d.m.Y" }}</span>
+                    </div>
+                    {% if task.updated_at %}
+                    <div class="meta-item">
+                        <span class="meta-icon">🔄</span>
+                        <span>Обновлено: {{ task.updated_at|date:"d.m.Y" }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="buttons-container">
+									<div class="buttons-row">
+										<a href="{% url 'edit_task' task.id %}" class="btn btn-warning">✏️ Редактировать задачу</a>
+										<a href="{% url 'home' %}" class="btn btn-secondary">🔙 Назад к списку</a>
+										<form method="POST" action="{% url 'delete_task' task.id %}" onsubmit="return confirm('Вы уверены, что хотите удалить эту задачу?');" class="d-inline">
+												{% csrf_token %}
+												<button type="submit" class="btn btn-danger">🗑️ Удалить задачу</button>
+										</form>
+								</div>
+						</div>
+        </div>
+            <form method="POST" action="{% url 'update_task_status' task.id %}" class="mt-4">
+                {% csrf_token %}
+                <label for="status">Изменить статус:</label>
+                <select name="status" id="status" class="form-control">
+                    {% for value, label in task.TASK_CHOICES %}
+                    <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn btn-primary">💾 Сохранить</button>
+            </form>
+
+            <a href="{% url 'task_message' task.id %}" class="message-link">
+                💬 Перейти к переписке
+            </a>
+
+            <h3 class="heading-with-icon">📝 Последние заметки</h3>
+
+            {% if recent_notes %}
+                <ul class="list-group">
+                    {% for note in recent_notes %}
+                    <li class="list-group-item">
+                        <p><strong>Заметка:</strong> {{ note.message }}</p>
+                        <p class="note-tag">{{ note.tag }}</p>
+                        
+                        {% if note.file %}
+                        <p><strong>Файл:</strong> <a href="{{ note.file.url }}" download>📎 Скачать</a></p>
+                        {% endif %}
+
+                        <p class="text-muted">Создано: {{ note.created_at|date:"d.m.Y H:i" }}</p>
+
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'edit_communication' note.id %}" class="btn btn-warning btn-sm me-2">✏️ Редактировать</a>
+                            <a href="{% url 'delete_communication' note.id %}" class="btn btn-danger btn-sm">🗑️ Удалить</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="task-detail">💡 Заметок пока нет.</p>
+            {% endif %}
+        </div>
+        
+        <!-- Новая боковая панель для дополнительной информации -->
+        <div class="sidebar">
+            <div class="sidebar-info">
+                <h4>📊 Прогресс задачи</h4>
+                
+                {% if task.status == 'new' %}
+                    <div class="progress-container">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 10%"></div>
+                        </div>
+                        <small>Статус: Новая (10%)</small>
+                    </div>
+                {% elif task.status == 'in_progress' %}
+                    <div class="progress-container">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 50%"></div>
+                        </div>
+                        <small>Статус: В процессе (50%)</small>
+                    </div>
+                {% elif task.status == 'completed' %}
+                    <div class="progress-container">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: 100%"></div>
+                        </div>
+                        <small>Статус: Завершена (100%)</small>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="sidebar-info">
+                <h4>⏱️ Таймтрекинг</h4>
+                <p>Время на задачу: <strong>{% if task.time_spent %}{{ task.time_spent }} ч.{% else %}Не указано{% endif %}</strong></p>
+                
+                {% if task.deadline %}
+                    {% if task.is_overdue %}
+                        <p>⚠️ Дедлайн просрочен на {{ task.days_overdue }} дней</p>
+                    {% else %}
+                        <p>✅ До дедлайна осталось {{ task.days_remaining }} дней</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <div class="sidebar-info">
+                <h4>👤 Ответственные</h4>
+                {% if task.assigned_to %}
+                    <p>{{ task.assigned_to }}</p>
+                {% else %}
+                    <p>Не назначено</p>
+                {% endif %}
+            </div>
+            
+            <div class="sidebar-info">
+                <h4>🏷️ Теги</h4>
+                {% if task.tags %}
+                    {% for tag in task.tags.all %}
+                        <span class="badge bg-secondary">{{ tag.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    <p>Теги отсутствуют</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 
 <link rel="stylesheet" href="{% static 'crm/css/detail.css' %}">
