@@ -1,7 +1,4 @@
-{% extends "crm/base.html" %}
-
-{% block title %}Переписка по задаче{% endblock %}
-
+{% load static %}
 {% block content %}
 <div class="container mt-4">
     <h2>Переписка по задаче: {{ task.title }}</h2>
@@ -11,61 +8,61 @@
 
     <h4>Заметки:</h4>
 
-		<form method="GET" action="" class="mb-3">
-			<div class='row g-3 align-items-center'>
-					<div class="col-md-6">
-							<div class="input-group">
-									<input type="text" name="q" class="form-control" placeholder="Поиск по тексту и тегам..." value="{{ query }}">
-									<button type="submit" class="btn btn-primary">🔎 Искать</button>
-							</div>
-					</div>
-	
-					<div class='col-md-2'>
-							<select name='date_filter' class='form-select'>
-									<option value=''>Все даты</option>
-									<option value='today' {% if date_filter == 'today' %}selected{% endif %}>Сегодня</option>
-									<option value="week" {% if date_filter == 'week' %}selected{% endif %}>Последняя неделя</option>
-									<option value="month" {% if date_filter == 'month' %}selected{% endif %}>Последний месяц</option>
-							</select>
-					</div>
-	
-					<div class='col-md-2'>
-							<select name='tag_filter' class='form-select'>
-									<option value=''>Все теги</option>
-									{% for tag in tags %}
-											<option value='{{ tag }}' {% if tag == tag_filter %}selected{% endif %}>{{ tag }}</option>
-									{% endfor %}
-							</select>
-					</div>
-	
-					<div class='col-md-2'>
-							<button type='submit' class='btn btn-primary w-100'>🔎 Применить фильтры</button>
-					</div>
-			</div>
-	</form>
+    <form method="GET" action="" class="mb-3">
+        <div class='row g-3 align-items-center'>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Поиск по тексту и тегам..." value="{{ query }}">
+                    <button type="submit" class="btn btn-primary">🔎 Искать</button>
+                </div>
+            </div>
+
+            <div class='col-md-2'>
+                <select name='date_filter' class='form-select'>
+                    <option value=''>Все даты</option>
+                    <option value='today' {% if date_filter == 'today' %}selected{% endif %}>Сегодня</option>
+                    <option value="week" {% if date_filter == 'week' %}selected{% endif %}>Последняя неделя</option>
+                    <option value="month" {% if date_filter == 'month' %}selected{% endif %}>Последний месяц</option>
+                </select>
+            </div>
+
+            <div class='col-md-2'>
+                <select name='tag_filter' class='form-select'>
+                    <option value=''>Все теги</option>
+                    {% for tag in tags %}
+                        <option value='{{ tag }}' {% if tag == tag_filter %}selected{% endif %}>{{ tag }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class='col-md-2'>
+                <button type='submit' class='btn btn-primary w-100'>🔎 Применить фильтры</button>
+            </div>
+        </div>
+    </form>
 
 
 {% if communications %}
 <div class="list-group">
-		{% for comm in communications %}
-				<div class="list-group-item mb-3">
-						<p><strong>Сообщение:</strong> {{ comm.message }}</p>
-						<p><strong>Тег:</strong> {{ comm.tag }}</p>
+    {% for comm in communications %}
+        <div class="list-group-item mb-3">
+            <p><strong>Сообщение:</strong> {{ comm.message }}</p>
+            <p><strong>Тег:</strong> {{ comm.tag }}</p>
 
-						{% if comm.file %}
-								<p><strong>Файл:</strong> 
-										<a href="{{ comm.file.url }}" download>{{ comm.file.name }}</a>
-								</p>
-						{% endif %}
+            {% if comm.file %}
+                <p><strong>Файл:</strong> 
+                    <a href="{{ comm.file.url }}" download>{{ comm.file.name }}</a>
+                </p>
+            {% endif %}
 
-						<p class="text-muted">Создано: {{ comm.created_at|date:"d.m.Y H:i" }}</p>
+            <p class="text-muted">Создано: {{ comm.created_at|date:"d.m.Y H:i" }}</p>
 
-						<div class="d-flex justify-content-end">
-								<a href="{% url 'edit_communication' comm.id %}" class="btn btn-warning btn-sm me-2">Редактировать</a>
-								<a href="{% url 'delete_communication' comm.id %}" class='btn btn-danger btn-sm'>Удалить</a>
-						</div>
-				</div>
-		{% endfor %}
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'edit_communication' comm.id %}" class="btn btn-warning btn-sm me-2">Редактировать</a>
+                <a href="{% url 'delete_communication' comm.id %}" class='btn btn-danger btn-sm'>Удалить</a>
+            </div>
+        </div>
+    {% endfor %}
 </div>
 {% else %}
 <p class="text-muted">🔍 Ничего не найдено по вашему запросу.</p>
@@ -77,11 +74,42 @@
     <form method="POST" enctype="multipart/form-data" class='mb-3'>
         {% csrf_token %}
         <div class="mb-3">
-            {{ form.as_p }}
+            <p>
+                <label for="id_message">Текст заметки:</label>
+                <textarea name="message" id="id_message" class="form-control" placeholder="Вставьте важную информацию из переписки или добавьте свою заметку..." rows="5">{{ form.message.value|default_if_none:'' }}</textarea>
+            </p>
+            <p>
+                <label for="id_tag">Тег:</label>
+                <select name="tag" id="id_tag" class="form-control">
+                    <option value="">-----</option>
+                    {% for tag_choice in form.tag.field.choices %}
+                        <option value="{{ tag_choice.0 }}" {% if form.tag.value == tag_choice.0 %}selected{% endif %}>{{ tag_choice.1 }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label for="id_custom_tag">Свой тег:</label>
+                <input type="text" name="custom_tag" id="id_custom_tag" class="form-control" value="{{ form.custom_tag.value|default_if_none:'' }}">
+            </p>
+            <p>
+                <label for="id_file">Файл:</label>
+                <input type="file" name="file" id="id_file" class="hidden-file-input">
+                <label for="id_file" class="file-upload-btn">Выбрать файл</label>
+                <span class="selected-file-name ml-2" id="fileNameDisplay"></span>
+            </p>
         </div>
         <button type="submit" class="btn btn-success">Добавить</button>
         <a href="{% url 'home' %}" class="btn btn-secondary">Назад</a>
     </form>
 </div>
 
+<link rel="stylesheet" href="{% static 'crm/css/task_message.css' %}">
+
+<script>
+    // JavaScript для отображения имени выбранного файла
+    document.getElementById('id_file').addEventListener('change', function() {
+        var fileName = this.files[0] ? this.files[0].name : 'Файл не выбран';
+        document.getElementById('fileNameDisplay').textContent = fileName;
+    });
+</script>
 {% endblock %}
