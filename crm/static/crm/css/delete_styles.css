@@ -1,0 +1,152 @@
+/* delete_communication.css */
+:root {
+  --delete-max-width: 800px;
+  --accent-blue: #4285f4;
+  --accent-purple: #6c5ce7;
+  --accent-teal: #0abde3;
+  --danger-color: #ff6b6b;
+  --warning-color: #feca57;
+  --card-bg: #2d3436;
+  --text-light: #dfe6e9;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+}
+
+.delete-note-container {
+  max-width: var(--delete-max-width);
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.delete-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--accent-blue);
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.delete-title:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  border-radius: 10px;
+}
+
+.delete-warning {
+  color: var(--danger-color);
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.note-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--box-shadow);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.note-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--accent-blue), var(--accent-purple));
+}
+
+.note-card p {
+  margin-bottom: 0.7rem;
+  line-height: 1.5;
+  color: var(--text-light);
+  padding-left: 1rem;
+}
+
+.note-card p:last-child {
+  margin-bottom: 0;
+}
+
+.note-card strong {
+  color: var(--accent-teal);
+  margin-right: 0.5rem;
+}
+
+.note-card a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.note-card a:hover {
+  text-decoration: underline;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+}
+
+.btn-secondary {
+  background-color: #546e7a;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #455a64;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(84, 110, 122, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.delete-note-container {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .button-group .btn {
+    width: 100%;
+  }
+}

@@ -1,25 +1,49 @@
 {% extends "crm/base.html" %}
-
-{% block title  %}Удаление заметки {% endblock%}
+{% load static %}
 
 {% block content %}
-<div class='container mt-4'>
-	<h2>Удаление заметки</h2>
-	<p>Вы действительно хотите удалить эту заметку?</p>
-	<div class='card p-3 mb-3'>
-		<p><strong>Сообщение:</strong>{{ communication.message }}</p>
-		{% if communication.tag %}
-		<p><strong>Тег:</strong>{{ communication.tag }}</p>
-		{% endif %}
-		{% if communication.file %}
-		<p><strong>Файл:</strong><a href='{{ communication.file.url }}' target='_blank'>Скачать</a></p>
-		{% endif %}
-</div>
+<div class="container">
+    <div class="delete-note-container">
+        <h2 class="delete-title">Удаление заметки</h2>
+        <p class="delete-warning">Вы действительно хотите удалить эту заметку?</p>
+        
+        <div class="note-card">
+            <p><strong>Сообщение:</strong> {{ communication.message }}</p>
+            {% if communication.tag %}
+            <p><strong>Тег:</strong> 
+                {% if communication.tag == "requirement" %}
+                    Требование
+                {% elif communication.tag == "bug" %}
+                    Ошибка
+                {% elif communication.tag == "feature" %}
+                    Функция
+                {% elif communication.tag == "enhancement" %}
+                    Улучшение
+                {% elif communication.tag == "question" %}
+                    Вопрос
+                {% elif communication.tag == "documentation" %}
+                    Документация
+                {% elif communication.tag == "design" %}
+                    Дизайн
+                {% elif communication.tag == "testing" %}
+                    Тестирование
+                {% else %}
+                    {{ communication.tag }}
+                {% endif %}
+            </p>
+            {% endif %}
+            {% if communication.file %}
+            <p><strong>Файл:</strong> <a href="{{ communication.file.url }}" target="_blank">Скачать</a></p>
+            {% endif %}
+        </div>
 
-	<form method='POST'>
-		{% csrf_token %}
-		<button type='submit' class='btn btn-danger'>Удалить</button>
-		<a href="{% url 'task_message' communication.task.id %}" class='btn btn-secondary'>Отмена</a>
-	</form>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="button-group">
+                <button type="submit" class="btn btn-danger">Удалить</button>
+                <a href="{% url 'task_message' communication.task.id %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock content %}
