@@ -1,0 +1,31 @@
+# 📝 Task Manager — Веб-приложение для управления задачами
+
+## 📌 Описание
+
+Простое и удобное приложение для создания, редактирования и удаления задач. 
+Разработано с целью закрепления навыков Django и фронтенда. Проект включает:
+- регистрацию и авторизацию пользователей,
+- создание и редактирование задач,
+- сортировку задач по категориям и статусам,
+- современный, адаптивный интерфейс.
+
+## ⚙️ Технологии
+
+- Python 3
+- Django 4.x
+- HTML5, CSS3
+- Bootstrap (или свой CSS-фреймворк, если ты вручную всё делал)
+- SQLite (по умолчанию в Django)
+
+## 🚀 Установка
+
+```bash
+git clone https://github.com/твоя-ссылка-на-репозиторий.git
+cd task-manager
+python -m venv venv
+source venv/bin/activate    # или venv\Scripts\activate на Windows
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+Перейдите на http://127.0.0.1:8000 чтобы открыть сайт.
