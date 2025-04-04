@@ -27,5 +27,19 @@ source venv/bin/activate    # или venv\Scripts\activate на Windows
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-
+```
 Перейдите на http://127.0.0.1:8000 чтобы открыть сайт.
+
+## Примеры работы
+### Интерфейс
+![Интерфейс](image1.png)
+
+### Процесс выполнения
+![Процесс](image2.png)
+
+### Итоговый результат
+![Результат](image3.png)
+
+🧑‍💻 Автор
+Exmar
+
