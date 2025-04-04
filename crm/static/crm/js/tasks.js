@@ -11,14 +11,14 @@ function openTaskDetails(taskId) {
 			.catch(error => console.error("Ошибка загрузки данных:", error));
 }
 
-// Закрытие деталей задачи
+
 function closeTaskDetails() {
 	document.getElementById("task-menu").style.display = "none";
 }
 
 // Удаление задачи
 function deleteTask(event, taskId) {
-	event.stopPropagation(); // Останавливаем всплытие события, чтобы не открывалось меню
+	event.stopPropagation(); 
 	
 	fetch(`/delete-task/${taskId}/`, { 
 			method: "POST", 
@@ -36,7 +36,7 @@ function deleteTask(event, taskId) {
 	.catch(error => console.error("Ошибка:", error));
 }
 
-// Функция для получения CSRF-токена из cookies
+
 function getCSRFToken() {
 	let cookieValue = null;
 	let cookies = document.cookie.split("; ");
@@ -49,9 +49,9 @@ function getCSRFToken() {
 	return cookieValue;
 }
 
-// Инициализация при загрузке страницы
+
 document.addEventListener("DOMContentLoaded", function () {
-	// Открывает форму добавления задачи
+	
 	const openFormBtn = document.getElementById('open-form-btn');
 	if (openFormBtn) {
 			openFormBtn.addEventListener('click', function() {
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			});
 	}
 
-	// Обработка успешной отправки формы
+
 	document.body.addEventListener("htmx:afterRequest", function(event) {
 			if (event.detail.successful) {
 					let formContainer = document.getElementById("task-form");  

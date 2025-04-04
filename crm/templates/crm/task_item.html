@@ -3,7 +3,6 @@
 	<h3>{{ task.name }}</h3>
 	<p>{{ task.description|truncatechars:100 }}</p>
 	
-	<!-- Прогресс-бар -->
 	<div class="task-progress">
 			<div class="progress-bar" style="width: {% if task.status == 'not_started' %}0%{% elif task.status == 'in_progress' %}50%{% else %}100%{% endif %}"></div>
 	</div>

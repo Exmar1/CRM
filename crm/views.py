@@ -70,27 +70,25 @@ def create_task(request):
             task.owner = request.user
             task.save()
             
-            # Проверяем, является ли запрос AJAX
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                # Возвращаем только шаблон элемента задачи без лишнего контекста
+                
                 return render(request, 'crm/task_item.html', {'task': task})
-            # Если обычный запрос, перенаправляем на главную
+            
             return redirect('home')
         else:
-            # Если форма невалидна
+            
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({'errors': form.errors}, status=400)
-            # Для обычного запроса выводим форму с ошибками
+            
             return render(request, 'crm/home.html', {'form': form, 'tasks': Task.objects.filter(owner=request.user)})
     
-    # Перенаправление на главную для GET-запросов
     return redirect('home')
 
 @login_required
 def delete_task(request, task_id):
     task = get_object_or_404(Task, id=task_id, owner=request.user)
     
-    if request.method == "POST" or request.method == "DELETE":  # Добавляем обработку DELETE
+    if request.method == "POST" or request.method == "DELETE": 
         task.delete()
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'status': 'success'})
@@ -150,7 +148,7 @@ def create_project(request):
             project = form.save(commit=False)
             project.owner = request.user
             project.save()
-            return redirect('project_list')  # или другая нужная вьюха
+            return redirect('project_list') 
     else:
         form = ProjectForm()
 
@@ -252,7 +250,6 @@ def edit_communication(request, communication_id):
     communication = get_object_or_404(Communication, id=communication_id)
     task = communication.task
     
-    # Проверяем, что задача принадлежит текущему пользователю
     if task.owner != request.user:
         return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
 
@@ -274,7 +271,6 @@ def delete_communication(request, communication_id):
     communication = get_object_or_404(Communication, id=communication_id)
     task = communication.task
     
-    # Проверяем, что задача принадлежит текущему пользователю
     if task.owner != request.user:
         return HttpResponseForbidden("Вы не имеете доступа к этой задаче!")
 

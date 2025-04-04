@@ -400,7 +400,6 @@ h3.heading-with-icon {
 	font-size: 1.2rem;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
 	.buttons-row {
 			flex-direction: column;

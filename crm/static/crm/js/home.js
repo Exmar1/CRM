@@ -1,4 +1,4 @@
-// Глобальные функции
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -14,7 +14,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// Глобальная функция переключения отображения формы
+
 function toggleTaskForm() {
     const taskForm = document.getElementById('task-form');
     const taskFormElement = document.getElementById('task-form-element');
@@ -35,7 +35,7 @@ function toggleTaskForm() {
     }
 }
 
-// Глобальная функция удаления задачи
+
 function deleteTaskConfirm(event, taskId) {
     event.preventDefault();
 
@@ -61,7 +61,7 @@ function deleteTaskConfirm(event, taskId) {
     }
 }
 
-// Глобальная функция обновления статистики
+
 function updateStats() {
     fetch('/get_stats/')
             .then(response => response.json())
@@ -80,17 +80,17 @@ function updateStats() {
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM загружен, инициализация скриптов');
 
-    // Получение элементов
+    
     const openFormBtn = document.getElementById('open-form-btn');
     const addTaskBtn = document.querySelector('.add-task-btn');
     
-    // Инициализация переменных для фильтров (это было пропущено)
+    
     const statusFilter = document.getElementById('status-filter');
     const priorityFilter = document.getElementById('priority-filter');
     const sortFilter = document.getElementById('sort-filter');
     const tabs = document.querySelectorAll('.tab');
 
-    // Обновление статистики сразу при загрузке страницы
+    
     updateStats();
 
     if (openFormBtn) {
@@ -109,21 +109,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-     // Обработчик событий для формы
+     
      const taskFormElement = document.getElementById('task-form-element');
 
-    // Обработчик формы создания задачи
+    
     if (taskFormElement) {
         taskFormElement.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Проверка, не отправляется ли форма уже
+            
             if (taskFormElement.dataset.submitting === "true") {
                 console.log('Форма уже отправляется');
                 return;
             }
             
-            // Устанавливаем флаг, чтобы избежать дублирования
+            
             taskFormElement.dataset.submitting = "true";
 
             console.log('Отправка формы задачи');
@@ -171,18 +171,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Ошибка:', error);
             })
             .finally(() => {
-                // Снимаем флаг после завершения
+            
                 taskFormElement.dataset.submitting = "false";
             });
         });
     }
 
-    // Исправление кнопки "Отмена" - используем правильный ID
+    
     const cancelBtn = document.getElementById('cancel-task-btn');
     if (cancelBtn) {
         cancelBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            toggleTaskForm(); // Используем toggleTaskForm вместо просто очистки формы
+            toggleTaskForm(); 
             console.log('Клик по кнопке отмены');
         });
     }

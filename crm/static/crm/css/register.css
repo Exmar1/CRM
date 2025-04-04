@@ -1,9 +1,9 @@
-/* Основные стили для страницы регистрации */
+
 .registration-page body {
 	background-color: #141924;
 	color: #ffffff;
 	font-family: 'Roboto', sans-serif;
-	overflow-x: hidden; /* Убираем горизонтальный скролл */
+	overflow-x: hidden; 
 	width: 100%;
 	max-width: 100%;
 	margin: 0;
@@ -19,13 +19,13 @@
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-/* Скрываем верхние кнопки входа и регистрации */
+
 .nav-login, .nav-register, 
 a[href*="login"]:not(.text-link), a[href*="register"]:not(.text-link) {
 	display: none !important;
 }
 
-/* Верхнее меню может скрывать кнопки */
+
 .navbar-buttons,
 .nav-buttons,
 .header-buttons,
@@ -35,7 +35,7 @@ a[href*="login"]:not(.text-link), a[href*="register"]:not(.text-link) {
 	display: none !important;
 }
 
-/* Если у тебя шапка с классом header, то можно так */
+
 header a[href*="login"]:not(.text-link),
 header a[href*="register"]:not(.text-link) {
 	display: none !important;
@@ -59,7 +59,7 @@ h1 .icon {
 	font-size: 16px;
 }
 
-/* Стили для формы */
+
 .registration-form {
 	display: flex;
 	flex-direction: column;
@@ -96,7 +96,7 @@ h1 .icon {
 	transform: translateY(-1px);
 }
 
-/* Кнопки */
+
 .button-container {
 	margin-top: 10px;
 	margin-bottom: 20px;
@@ -205,7 +205,7 @@ h1 .icon {
 	display: block;
 }
 
-/* Анимации */
+
 @keyframes fadeIn {
 	from {
 			opacity: 0;
@@ -221,7 +221,7 @@ h1 .icon {
 	animation: fadeIn 0.4s ease-out;
 }
 
-/* Исправление для контейнера страницы */
+
 #content, 
 .content,
 .container,
@@ -232,7 +232,7 @@ h1 .icon {
 	overflow-x: hidden;
 }
 
-/* Ещё одна попытка убрать горизонтальный скролл */
+
 html, body {
 	overflow-x: hidden;
 	position: relative;

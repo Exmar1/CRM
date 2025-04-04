@@ -1,4 +1,4 @@
-/* Основные цвета и стили */
+
 :root {
   --dark-bg: #161924;
   --card-bg: #1e2133;
@@ -26,7 +26,6 @@ body {
   padding: 1.5rem;
 }
 
-/* Заголовки с градиентом */
 h2 {
   font-size: 1.8rem;
   font-weight: 700;
@@ -62,8 +61,7 @@ hr {
   background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.1), rgba(255,255,255,0.01));
   margin: 2rem 0;
 }
-
-/* Карточки сообщений */
+/
 .list-group-item {
   background-color: var(--card-bg);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -99,14 +97,14 @@ hr {
 
 .input-group {
   display: flex;
-  align-items: center; /* Возвращаем выравнивание по центру */
+  align-items: center; 
   margin-bottom: 1rem;
 }
 
 .input-group .form-control,
 .input-group .btn {
-  height: 42px; /* Одинаковая высота */
-  line-height: 42px; /* Одинаковая высота строки */
+  height: 42px; 
+  line-height: 42px;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -123,12 +121,12 @@ hr {
 
 .form-select {
   background-color: rgba(30, 33, 51, 0.8);
-  color: var(--text-light); /* Возвращаем светлый цвет текста как в фильтрах сверху */
+  color: var(--text-light); 
 }
 
 .form-select option {
   background-color: var(--card-bg);
-  color: var(--text-light); /* Возвращаем светлый цвет текста как в фильтрах сверху */
+  color: var(--text-light); 
 }
 
 .form-control:focus, .form-select:focus {
@@ -141,16 +139,16 @@ hr {
 
 .search-container {
   display: flex;
-  align-items: center; /* Выравнивание элементов по центру */
+  align-items: center; 
 }
 
 .search-container input[type="text"] {
   flex: 1;
-  margin-right: 10px; /* Отступ между полем и кнопкой */
+  margin-right: 10px; 
 }
 
 .search-container button {
-  white-space: nowrap; /* Запрещает перенос текста кнопки */
+  white-space: nowrap; 
 }
 
 .form-control::placeholder {
@@ -170,7 +168,7 @@ hr {
   appearance: none;
 }
 
-/* Улучшенные кнопки */
+
 .btn {
   border-radius: var(--border-radius);
   font-weight: 600;

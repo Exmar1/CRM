@@ -19,7 +19,7 @@ body {
   color: var(--text-light);
 }
 
-/* Верхняя навигационная панель */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -60,21 +60,21 @@ body {
   background-color: #c0392b;
 }
 
-/* Основной контейнер */
+
 .container {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
 }
 
-/* Заголовки */
+
 h1 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   color: var(--text-light);
 }
 
-/* Кнопки */
+
 .btn {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -122,7 +122,7 @@ h1 {
   background-color: #c0392b;
 }
 
-/* Форма создания задачи */
+
 #task-form {
   background-color: rgba(52, 73, 94, 0.7);
   padding: 1.5rem;
@@ -162,7 +162,7 @@ h1 {
   box-sizing: border-box;
 }
 
-/* Кнопки формы */
+
 #task-form .btn-container {
   display: flex;
   gap: 0.5rem;
@@ -170,7 +170,7 @@ h1 {
   justify-content: flex-end;
 }
 
-/* Список задач */
+
 .tasks-container {
   margin-top: 2rem;
 }
@@ -271,7 +271,6 @@ h1 {
   text-decoration: underline;
 }
 
-/* Детали задачи */
 .task-details {
   background-color: rgba(44, 62, 80, 0.8);
   border-radius: var(--border-radius);
@@ -289,7 +288,7 @@ h1 {
   margin-bottom: 1rem;
 }
 
-/* Форма поиска и фильтрации для коммуникаций */
+
 .search-filter-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -300,13 +299,13 @@ h1 {
   border-radius: var(--border-radius);
 }
 
-/* Сообщения и коммуникации */
+
 .communications-container {
   margin-top: 2rem;
 }
 
 .nav-btn {
-  width: auto !important; /* Переопределяет width: 100% из других стилей */
+  width: auto !important; 
   display: inline-block !important;
 }
 
@@ -358,7 +357,7 @@ h1 {
   text-decoration: underline;
 }
 
-/* Модальное окно деталей задачи */
+
 #task-menu {
   position: fixed;
   top: 50%;
@@ -378,7 +377,7 @@ h1 {
   color: white;
 }
 
-/* Адаптивность для мобильных устройств */
+
 @media (max-width: 768px) {
   .navbar {
     padding: 1rem;
@@ -395,7 +394,7 @@ h1 {
   }
 }
 
-/* Кнопка добавления новой задачи */
+
 .add-task-btn {
   position: fixed;
   bottom: 20px;
@@ -421,7 +420,7 @@ h1 {
   transform: scale(1.1);
 }
 
-/* Форма входа и регистрации */
+
 .auth-container {
   max-width: 400px;
   margin: 5rem auto;
@@ -473,7 +472,7 @@ h1 {
   text-decoration: underline;
 }
 
-/* Сообщения об ошибках и уведомления */
+
 .alert {
   padding: 0.75rem 1rem;
   border-radius: var(--border-radius);
@@ -498,13 +497,13 @@ h1 {
   color: #3498db;
 }
 
-/* Стили для поля выбора даты */
+
 input[type="date"],
 input[type="datetime-local"] {
   color: var(--text-dark);
 }
 
-/* Пустое состояние списка задач */
+
 .empty-list {
   text-align: center;
   padding: 3rem;
@@ -517,9 +516,7 @@ input[type="datetime-local"] {
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Добавить в style.css */
 
-/* Секция статистики */
 .stats-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -546,7 +543,7 @@ input[type="datetime-local"] {
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Улучшения для карточек задач */
+
 .task-item {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
@@ -573,7 +570,7 @@ input[type="datetime-local"] {
   background-color: #f39c12;
 }
 
-/* Фильтры и сортировка */
+
 .filters-container {
   display: flex;
   gap: 1rem;
@@ -601,7 +598,7 @@ input[type="datetime-local"] {
   padding: 0.5rem;
 }
 
-/* Вкладки для задач */
+
 .tabs {
   display: flex;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -625,7 +622,7 @@ input[type="datetime-local"] {
   opacity: 1;
 }
 
-/* Добавь эти стили в style.css */
+
 .header-container {
   display: flex;
   justify-content: space-between;

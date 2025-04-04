@@ -106,7 +106,6 @@
 <link rel="stylesheet" href="{% static 'crm/css/task_message.css' %}">
 
 <script>
-    // JavaScript для отображения имени выбранного файла
     document.getElementById('id_file').addEventListener('change', function() {
         var fileName = this.files[0] ? this.files[0].name : 'Файл не выбран';
         document.getElementById('fileNameDisplay').textContent = fileName;
