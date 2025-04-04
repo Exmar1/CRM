@@ -1,5 +1,5 @@
 /* Основные стили для страницы регистрации */
-.registration-page body  {
+.registration-page body {
 	background-color: #141924;
 	color: #ffffff;
 	font-family: 'Roboto', sans-serif;
@@ -10,9 +10,18 @@
 	padding: 0;
 }
 
+.registration-page {
+	max-width: 500px;
+	margin: 60px auto;
+	padding: 35px;
+	background-color: #1e2330;
+	border-radius: 12px;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
 /* Скрываем верхние кнопки входа и регистрации */
 .nav-login, .nav-register, 
-a[href*="login"], a[href*="register"] {
+a[href*="login"]:not(.text-link), a[href*="register"]:not(.text-link) {
 	display: none !important;
 }
 
@@ -27,18 +36,9 @@ a[href*="login"], a[href*="register"] {
 }
 
 /* Если у тебя шапка с классом header, то можно так */
-header a[href*="login"],
-header a[href*="register"] {
+header a[href*="login"]:not(.text-link),
+header a[href*="register"]:not(.text-link) {
 	display: none !important;
-}
-
-.registration-container {
-	max-width: 500px;
-	margin: 60px auto;
-	padding: 35px;
-	background-color: #1e2330;
-	border-radius: 12px;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 h1 {
@@ -142,13 +142,13 @@ h1 .icon {
 }
 
 .text-link {
-	color: white;
+	color: white !important;
 	background-color: #4da3ff;
 	text-decoration: none;
 	padding: 10px 20px;
 	border-radius: 6px;
 	font-weight: 500;
-	display: inline-flex;
+	display: inline-flex !important;
 	align-items: center;
 	justify-content: center;
 	transition: all 0.2s ease;
@@ -208,16 +208,16 @@ h1 .icon {
 /* Анимации */
 @keyframes fadeIn {
 	from {
-		opacity: 0;
-		transform: translateY(10px);
+			opacity: 0;
+			transform: translateY(10px);
 	}
 	to {
-		opacity: 1;
-		transform: translateY(0);
+			opacity: 1;
+			transform: translateY(0);
 	}
 }
 
-.registration-container {
+.registration-page {
 	animation: fadeIn 0.4s ease-out;
 }
 
