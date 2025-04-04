@@ -11,20 +11,21 @@
     <link rel="stylesheet" href="{% static 'crm/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'crm/css/task_message.css' %}">
     <link rel="stylesheet" href="{% static 'crm/css/delete_styles.css' %}">
-    <title>{% block title %} CRM для фрилансеров{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+    <title>{% block title %}CRM для фрилансеров{% endblock %}</title>
 </head>
 
 <body>
     <header>
         <h1>CRM для фрилансеров</h1>
         <nav>
-            {% if user.is_authenticated %}
-                <p>👋 Привет, {{ user.username }}!</p>
-                <a href="{% url 'logout' %}" class="btn btn-danger">🚪 Выйти</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">🔑 Войти</a>
-                <a href="{% url 'register' %}" class="btn btn-success">🛡️ Регистрация</a>
-            {% endif %}
+        {% if user.is_authenticated %}
+            <p>👋 Привет, {{ user.username }}!</p>
+            <a href="{% url 'logout' %}" class="btn btn-danger nav-btn">🚪 Выйти</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary nav-btn">🔑 Войти</a>
+            <a href="{% url 'register' %}" class="btn btn-success nav-btn">🛡️ Регистрация</a>
+        {% endif %}
         </nav>
     </header>
 
