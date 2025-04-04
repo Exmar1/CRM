@@ -1,13 +1,64 @@
 {% extends "crm/base.html" %}
 
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>🔑 Вход</h1>
-
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <button type="submit" class="btn btn-primary">✅ Войти</button>
-    <a href="{% url 'register' %}" class="btn btn-secondary">🛡️ Нет аккаунта? Зарегистрироваться</a>
-</form>
+<div class="registration-page">
+    <div class="login-card">
+        <div class="header-logo">💼 CRM для фрилансеров</div>
+        
+        <h1><span class="key-icon">🔑</span> Вход в систему</h1>
+        
+        <div class="login-form-container">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.password.id_for_label }}">Пароль</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                
+                {% if form.non_field_errors %}
+                <div class="error-message">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div>
+                    <button type="submit" class="btn btn-primary">✓ Войти</button>
+                </div>
+                
+                <div class="login-options">
+                    <a href="{% url 'register' %}" class="btn btn-secondary register-link">🛡️ Нет аккаунта? Зарегистрироваться</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="{% static 'crm/css/login.css' %}">
 {% endblock %}

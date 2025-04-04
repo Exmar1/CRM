@@ -1,0 +1,231 @@
+/* login.css */
+
+.registration-page {
+	background-color: #111827;
+	color: #ffffff;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	width: 100%;
+}
+
+.crm-header {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.login-card {
+	background-color: #1f2937;
+	border-radius: 12px;
+	width: 100%;
+	max-width: 450px;
+	padding: 35px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	position: relative; /* Добавляем для корректного позиционирования элементов внутри */
+}
+
+.login-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.header-logo {
+	background-color: #1e3a8a;
+	color: white;
+	padding: 10px 16px;
+	border-radius: 8px;
+	display: inline-block;
+	margin-bottom: 25px;
+	font-weight: bold;
+	box-shadow: 0 4px 8px rgba(30, 58, 138, 0.3);
+}
+
+h1 {
+	font-size: 32px;
+	margin: 20px 0 30px 0;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	color: white;
+}
+
+.key-icon {
+	color: #f0b429;
+	font-size: 32px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+label {
+	color: #38bdf8;
+	font-size: 16px;
+	font-weight: 500;
+	margin-bottom: 5px;
+}
+
+input {
+	background-color: #1e293b;
+	border: 1px solid #334155;
+	border-radius: 8px;
+	color: white;
+	font-size: 16px;
+	padding: 14px 16px;
+	width: 100%;
+	box-sizing: border-box;
+	transition: all 0.2s ease-in-out;
+}
+
+input:focus {
+	border-color: #38bdf8;
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+	transform: translateY(-2px);
+}
+
+.btn {
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 500;
+	padding: 14px 22px;
+	border-radius: 8px;
+	border: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 10px;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+	background-color: #10b981;
+	color: white;
+	width: auto; /* Изменено с 100% на auto */
+	min-width: 120px; /* Добавлен минимальный размер */
+	max-width: 200px;
+	align-self: center; /* Центрирование кнопки */
+}
+
+.btn-primary:hover {
+	background-color: #059669;
+	transform: translateY(-3px);
+	box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+	background-color: #334155;
+	color: white;
+	width: 100%;
+	max-width: 100%; /* Ограничиваем максимальную ширину кнопки */
+	box-sizing: border-box; /* Учитываем padding в ширине */
+	overflow: hidden; /* Скрываем содержимое, выходящее за пределы */
+	text-overflow: ellipsis; /* Добавляем многоточие при обрезании текста */
+	white-space: nowrap; /* Убираем перенос текста */
+}
+
+.btn-secondary:hover {
+	background-color: #475569;
+	transform: translateY(-2px);
+}
+
+.login-options {
+	margin-top: 25px;
+	width: 100%;
+	display: flex;
+	justify-content: center; /* Центрируем кнопку */
+}
+
+.error-message {
+	color: #ef4444;
+	font-size: 14px;
+	background-color: rgba(239, 68, 68, 0.1);
+	padding: 10px 12px;
+	border-radius: 6px;
+	margin-top: 8px;
+	border-left: 3px solid #ef4444;
+}
+
+.login-form-container {
+	margin-top: 10px;
+	width: 100%;
+}
+
+.register-link {
+	margin-top: 15px;
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	font-size: 15px; /* Немного меньший размер шрифта, чтобы текст лучше помещался */
+}
+
+/* Центрирование кнопок */
+form > div {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Адаптируем Django формы */
+p {
+	margin: 0;
+}
+
+.helptext {
+	font-size: 14px;
+	color: #9ca3af;
+	margin-top: 4px;
+}
+
+ul.errorlist {
+	color: #ef4444;
+	font-size: 14px;
+	margin: 4px 0;
+	padding-left: 20px;
+	list-style-type: none;
+	background-color: rgba(239, 68, 68, 0.05);
+	padding: 8px 12px;
+	border-radius: 4px;
+}
+
+.nav-buttons {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	display: flex;
+	gap: 10px;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(10px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+.registration-page {
+	animation: fadeIn 0.5s ease-in-out;
+}
