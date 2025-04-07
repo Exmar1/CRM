@@ -14,7 +14,7 @@
 - Python 3
 - Django 4.x
 - HTML5, CSS3
-- Bootstrap (или свой CSS-фреймворк, если ты вручную всё делал)
+- Bootstrap
 - SQLite (по умолчанию в Django)
 
 ## 🚀 Установка
