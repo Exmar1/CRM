@@ -42,7 +42,7 @@ python manage.py runserver
 
 ## Контакты
 Если у вас есть вопросы, пишите мне:
-- Telegram: @Cherytig0
+- Telegram: @Exmar1
 
 🧑‍💻 Автор
 Exmar
